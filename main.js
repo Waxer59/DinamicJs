@@ -14,8 +14,8 @@ code.addEventListener('input', () => {
 //* Functions
 
 const update = () => {
-  const html = newHtml();
   try {
+    const html = newHtml();
     output.setAttribute('srcdoc', html);
   } catch (error) {
     logger.innerHTML = console.logs;
@@ -35,16 +35,23 @@ const newHtml = () => {
     <style>
     *{
       font-family: 'Manrope', sans-serif;
+      list-style: none;
+      color: #cecece;
     }
     </style>
     </head>
     <body>
 
-    <p id="logger"></p>
+    <div id="logger-container">
+      <ul id="logger">
+
+      </ul>
+    </div>
 
     <script>
+    const logger = document.querySelector('#logger');
+    logger.innerHTML = '';
     try {
-        const logger = document.querySelector('#logger')
         console.stdlog = console.log.bind(console);
         console.logs = [];
         console.log = function(){
@@ -52,9 +59,11 @@ const newHtml = () => {
             // console.stdlog.apply(console, arguments);
         }
         ${js}
-        logger.innerHTML = console.logs
-    } catch (error) {
-      logger.innerHTML = error
+        console.logs.map((log)=>{
+          logger.innerHTML += '<li>'+log+'</li>'
+        })
+      } catch (error) {
+      logger.innerHTML = '<li>' + error + '</li>'
     }
     </script>
     </body>
