@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "js-base64": "^3.7.2",
-    "monaco-editor": "^0.34.0"
+    "monaco-editor": "^0.34.0",
+    "split.js": "^1.6.5"
   }
 }

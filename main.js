@@ -1,6 +1,7 @@
 import * as monaco from 'monaco-editor';
 import JsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 import { encode, decode, isValid } from 'js-base64';
+import Split from 'split.js'
 
 //* Variables
 const { pathname } = window.location
@@ -10,6 +11,7 @@ try {
   base64Code = isValid(urlCode)? decode(urlCode) : '';
 } catch (error) {
   base64Code = '';
+  window.history.pushState('code', '', '/'); 
 }
 //* References
 const code = document.querySelector('#code');
@@ -29,7 +31,7 @@ const newHtml = () => {
 
   //* Update url to save all the code
   base64Code = encode(js);
-  window.history.pushState('code', '', `/${base64Code}`);
+  window.history.pushState('code', '', `/${base64Code}`); // change url
 
   return `
     <!DOCTYPE html>
@@ -112,6 +114,7 @@ const jsEditor = monaco.editor.create(code, {
   padding: {
     top: 16
   },
+  automaticLayout: true, // resize the code area
   minimap: {
     enabled: false
   },
@@ -119,3 +122,12 @@ const jsEditor = monaco.editor.create(code, {
 });
 
 jsEditor.onDidChangeModelContent(update);
+
+
+//* SplitJS
+Split(['#code-container', '#output-container']);
+
+window.onresize = () => {
+  console.log('Window resize');
+  editor.layout({});
+};
