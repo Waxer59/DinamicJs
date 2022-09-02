@@ -1,0 +1,27 @@
+* {
+  font-family: "Manrope", sans-serif;
+}
+
+body {
+  background: #f2f2f2;
+  display: flex;
+}
+body .code-container {
+  width: 50%;
+}
+body .code-container .code {
+  width: 100%;
+  height: 500px;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body .output-container {
+  width: 50%;
+}
+body .output-container .output {
+  width: 100%;
+  height: 500px;
+}
+
+/*# sourceMappingURL=styles.css.map */
