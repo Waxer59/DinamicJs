@@ -6,6 +6,11 @@ $secondary: #ececec;
   box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 body {
   background: $principal;
   display: flex;
@@ -14,19 +19,26 @@ body {
     display: flex;
     .code-container {
       width: 50%;
+      height: 100%;
       .code {
         width: 100%;
-        height: 500px;
+        height: 100%;
         box-sizing: border-box;
       }
     }
     .output-container {
       width: 50%;
+      height: 100%;
       .output {
+        height: 100%;
         width: 100%;
-        height: 500px;
         border: none;
       }
     }
   }
+}
+
+//* Scrollar
+::-webkit-scrollbar {
+    display: none;
 }

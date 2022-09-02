@@ -1,6 +1,7 @@
 # DinamicJs
 
-Es una aplicacion que corre js a tiempo real, su consola esta desplegada a la derecha en la que se pueden ver los logs
+Es una aplicacion que corre js a tiempo real, su consola esta desplegada a la derecha en la que se pueden ver los logs,
+todo el codigo queda serializado en la url en base64 para poder compartirlo o guardarlo
 
 # Iniciar el proyecto en modo dev
 
