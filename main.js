@@ -126,8 +126,3 @@ jsEditor.onDidChangeModelContent(update);
 
 //* SplitJS
 Split(['#code-container', '#output-container']);
-
-window.onresize = () => {
-  console.log('Window resize');
-  editor.layout({});
-};

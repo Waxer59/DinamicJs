@@ -19,3 +19,6 @@ yarn dev
 
 * [Monaco editor](https://microsoft.github.io/monaco-editor/)
 * Sass
+* SplitJs
+* Node
+* Express
