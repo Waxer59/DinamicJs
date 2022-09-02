@@ -1,17 +1,19 @@
 import * as monaco from 'monaco-editor';
 import JsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
-import { encode, decode } from 'js-base64';
+import { encode, decode, isValid } from 'js-base64';
 
 //* Variables
 const { pathname } = window.location
 const urlCode = pathname.replace(/^./, "");
-var base64Code = decode(urlCode) ?? '';
-
+var base64Code;
+try {
+  base64Code = isValid(urlCode)? decode(urlCode) : '';
+} catch (error) {
+  base64Code = '';
+}
 //* References
 const code = document.querySelector('#code');
 const output = document.querySelector('#output');
-
-//* Listeners
 
 //* Functions
 
