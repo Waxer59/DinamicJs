@@ -42,10 +42,10 @@ const newHtml = () => {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope&display=swap" rel="stylesheet">
     <style>
-    ::-webkit-scrollbar {
+      ::-webkit-scrollbar {
       width: 10px;
-    }
-    ::-webkit-scrollbar-track {
+      }
+      ::-webkit-scrollbar-track {
         background: transparent;
       }
       ::-webkit-scrollbar-thumb {
@@ -64,6 +64,9 @@ const newHtml = () => {
       p{
         padding: 5px 0;
         margin: 0;
+      }
+      .error{
+          color: #ff3333;
       }
       </style>
       </head>
@@ -87,10 +90,11 @@ const newHtml = () => {
         }
         ${js}
         console.logs.map((log)=>{
-          logger.innerHTML += '<li><p>'+log+'</p></li>'
+          logger.innerHTML += '<li><p class="log"> Log: '+log+'</p></li>'
         })
       } catch (error) {
-        logger.innerHTML = '<li><p>' + error + '</p></li>'
+        console.log(error, 'ERROR')
+        logger.innerHTML = '<li><p class="error">' + error + '</p></li>'
       }
       </script>
       </body>
@@ -112,6 +116,7 @@ const jsEditor = monaco.editor.create(code, {
   language: 'javascript',
   theme: 'vs-dark',
   fontSize: 18,
+  fontFamily: 'Arial',
   padding: {
     top: 16
   },
