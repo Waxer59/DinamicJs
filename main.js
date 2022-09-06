@@ -59,10 +59,13 @@ const newHtml = () => {
         font-family: 'Manrope', sans-serif;
         list-style: none;
         color: #cecece;
-        font-size: 24px;
+      }
+      html{
+        font-size: clamp(16px, 3vw, 28px); 
       }
       p{
         padding: 5px 0;
+        font-size: 1rem;
         margin: 0;
       }
       .error{
@@ -101,7 +104,6 @@ const newHtml = () => {
       </html>
       `;
 };
-
 //* Monaco editor
 window.MonacoEnvironment = {
   getWorker(_, label) {
@@ -118,7 +120,8 @@ const jsEditor = monaco.editor.create(code, {
   fontSize: 18,
   fontFamily: 'Arial',
   padding: {
-    top: 16
+    top: 16,
+    // left: 2
   },
   automaticLayout: true, // resize the code area
   minimap: {
