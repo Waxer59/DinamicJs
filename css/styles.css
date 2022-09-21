@@ -1,3 +1,22 @@
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url(../fonts/JetBrainsMono[wght].ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url(../fonts/JetBrainsMono-Italic[wght].ttf);
+  font-weight: normal;
+  font-style: italic;
+}
+.alerts {
+  font-family: Arial, Helvetica, sans-serif !important;
+  border-radius: 5px !important;
+  color: #ececec !important;
+  background: #2c2c2c !important;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -5,6 +24,28 @@
 html,
 body {
   height: 100%;
+}
+
+.download {
+  cursor: pointer;
+  position: absolute;
+  bottom: 20px;
+  background: #1c1c1c;
+  right: 15px;
+  z-index: 99;
+  border-radius: 100%;
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  padding: 1rem;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+.download i {
+  color: #ececec;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 body {

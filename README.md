@@ -18,6 +18,8 @@ yarn dev
 ## Tecnologias usadas
 
 * [Monaco editor](https://microsoft.github.io/monaco-editor/)
+* [FontAwesome](https://fontawesome.com/)
+* [SweetAlert2](https://sweetalert2.github.io/)
 * Sass
 * SplitJs
 * Node

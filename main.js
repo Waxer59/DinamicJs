@@ -1,7 +1,11 @@
 import * as monaco from 'monaco-editor';
 import JsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 import { encode, decode, isValid } from 'js-base64';
+import Swal from 'sweetalert2';
 import Split from 'split.js';
+
+//* References
+const downloadBtn = document.querySelector('#download-btn');
 
 //* Variables
 const { pathname } = window.location;
@@ -20,6 +24,28 @@ const code = document.querySelector('#code');
 const output = document.querySelector('#output');
 
 //* Functions
+
+const download = (file, text) => {
+
+  //! A file must contain text
+  if(text === ''){
+    throw new Error('A file can not be empty');
+  }
+
+  var element = document.createElement('a');
+  element.setAttribute(
+    'href',
+    'data:text/plain;charset=utf-8, ' + encodeURIComponent(text)
+  );
+  element.setAttribute('download', file);
+
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+
+};
 
 const update = () => {
   try {
@@ -123,9 +149,10 @@ const jsEditor = monaco.editor.create(code, {
   language: 'javascript',
   theme: 'vs-dark',
   fontSize: 18,
-  fontFamily: 'Arial',
+  fontFamily: "'JetBrains Mono', Arial, Helvetica, sans-serif",
+  fontLigatures: 'on',
   padding: {
-    top: 16,
+    top: 16
     // left: 2
   },
   automaticLayout: true, // resize the code area
@@ -138,7 +165,65 @@ const jsEditor = monaco.editor.create(code, {
 jsEditor.onDidChangeModelContent(update);
 
 //* SplitJS
+
 Split(['#code-container', '#output-container']);
 
 //* Initial funtions
+
 output.setAttribute('srcdoc', newHtml());
+
+//* SweetAlert2
+
+const customClass = {
+  popup: 'alerts',
+  validationMessage: 'alerts',
+}
+
+downloadBtn.addEventListener('click', async () => {
+  const { value } = await Swal.fire({
+    title: 'Enter your file name',
+    customClass,
+    input: 'text',
+    inputLabel: `Don't put the extension`,
+    showCloseButton: true,
+    showLoaderOnConfirm: true,
+    showCancelButton: true,
+    inputValidator: (value) => {
+      if (!value) {
+        return 'You need to write something!';
+      }
+    }
+  });
+
+  if (value) {
+    let text = jsEditor.getValue() ?? '';
+    let filename = `${value}.js`;
+
+    const Toast = Swal.mixin({
+      toast: true,
+      customClass,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      }
+    });
+
+    try {
+      download(filename, text);
+
+      Toast.fire({
+        icon: 'success',
+        title: 'File downloaded'
+      });
+    } catch (error) {
+      Toast.fire({
+        icon: 'error',
+        title: error
+      });
+    }
+  }
+});
