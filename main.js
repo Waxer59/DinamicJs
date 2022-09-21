@@ -86,15 +86,20 @@ const newHtml = () => {
       logger.innerHTML = '';
       try {
         console.stdlog = console.log.bind(console);
-        console.logs = [];
+        consoleLogs = [];
         console.log = function(){
-          console.logs.push(Array.from(arguments));
+          consoleLogs.push(Array.from(arguments));
           // console.stdlog.apply(console, arguments);
         }
         ${js}
-        console.logs.map((log)=>{
-          logger.innerHTML += '<li><p class="log"> Log: '+log+'</p></li>'
-        })
+        if(consoleLogs){
+          consoleLogs.forEach((log)=>{
+            if(String(log).trim() == ''){
+              return;
+            }
+            logger.innerHTML += '<li><p class="log"> Log: '+log+'</p></li>'
+          })
+        }
       } catch (error) {
         console.log(error, 'ERROR')
         logger.innerHTML = '<li><p class="error">' + error + '</p></li>'
