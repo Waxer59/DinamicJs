@@ -148,6 +148,7 @@ const jsEditor = monaco.editor.create(code, {
   value: base64Code,
   language: 'javascript',
   theme: 'vs-dark',
+  mouseWheelZoom: true,
   fontSize: 18,
   fontFamily: "'JetBrains Mono', Arial, Helvetica, sans-serif",
   fontLigatures: 'on',
