@@ -1,21 +1,21 @@
 # DinamicJs
 
-Es una aplicacion que corre js a tiempo real, su consola esta desplegada a la derecha en la que se pueden ver los logs,
-todo el codigo queda serializado en la url en base64 para poder compartirlo o guardarlo
+It is an application that runs js in real time, its console is displayed on the right where you can see the logs,
+all the code is serialized in the url in base64 to be able to share or save it.
 
-# Iniciar el proyecto en modo dev
+# Start the project in dev mode
 
-1. Instalar todas las dependencias del proyecto con el comando: 
+1. Install all project dependencies with the command: 
 ```
 yarn
 ```
 
-2. Iniciar el proyecto con el comando:
+2. Start the project with the command:
 ```
 yarn dev
 ```
 
-## Tecnologias usadas
+## Technologies used
 
 * [Monaco editor](https://microsoft.github.io/monaco-editor/)
 * [FontAwesome](https://fontawesome.com/)
