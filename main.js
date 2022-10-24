@@ -3,6 +3,18 @@ import JsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { encode, decode, isValid } from 'js-base64';
 import Swal from 'sweetalert2';
 import Split from 'split.js';
+import * as Babel from '@babel/standalone/babel';
+import protect from 'loop-protect'
+
+
+//* Loop protection
+
+Babel.registerPlugin('loopProtection', protect(100));
+
+const transform = (source) =>
+  Babel.transform(source, {
+    plugins: ['loopProtection']
+  }).code;
 
 //* References
 const downloadBtn = document.querySelector('#download-btn');
@@ -26,9 +38,8 @@ const output = document.querySelector('#output');
 //* Functions
 
 const download = (file, text) => {
-
   //! A file must contain text
-  if(text === ''){
+  if (text === '') {
     throw new Error('A file can not be empty');
   }
 
@@ -44,7 +55,6 @@ const download = (file, text) => {
   element.click();
 
   document.body.removeChild(element);
-
 };
 
 const update = () => {
@@ -54,12 +64,15 @@ const update = () => {
 };
 
 const newHtml = () => {
-  const js = jsEditor.getValue() ?? '';
-
+  let js = jsEditor.getValue() ?? '';
+  
   //* new url
   base64Code = encode(js);
   window.history.pushState('code', '', `/${base64Code}`); // change url
 
+  // Protect infinite loops
+  js = transform(js);
+  
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -177,8 +190,8 @@ output.setAttribute('srcdoc', newHtml());
 
 const customClass = {
   popup: 'alerts',
-  validationMessage: 'alerts',
-}
+  validationMessage: 'alerts'
+};
 
 downloadBtn.addEventListener('click', async () => {
   const { value } = await Swal.fire({

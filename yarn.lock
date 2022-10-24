@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@babel/standalone@^7.19.6":
+  version "7.19.6"
+  resolved "https://registry.yarnpkg.com/@babel/standalone/-/standalone-7.19.6.tgz#88674a287d3875a635b62afb066ebf162cedf13c"
+  integrity sha512-SUOBMtHlxGpXf14X85c1vtHyxYgIODBUdclntETSEGkgI274MNPBUkOVWpvFmRhMuLokK3CL07qJoK2e5CIToA==
+
 "@esbuild/linux-loong64@0.14.54":
   version "0.14.54"
   resolved "https://registry.yarnpkg.com/@esbuild/linux-loong64/-/linux-loong64-0.14.54.tgz#de2a4be678bd4d0d1ffbb86e6de779cde5999028"
@@ -167,6 +172,11 @@ js-base64@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-3.7.2.tgz#816d11d81a8aff241603d19ce5761e13e41d7745"
   integrity sha512-NnRs6dsyqUXejqk/yv2aiXlAvOs56sLkX6nUdeaNezI5LFFLlsZjOThmwnrcwh5ZZRwZlCMnVAY3CvhIhoVEKQ==
+
+loop-protect@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/loop-protect/-/loop-protect-2.1.6.tgz#03840f79591121c37a53a87fb9aff2841e488c2d"
+  integrity sha512-eGNk917T5jQ9A/ER/zJlEXCGD/NQepYyLnLBgVPSuspHauG2HUiDx5oKDSpyVQOzGb+yUKMA1k41+Old2ZmcRQ==
 
 monaco-editor@^0.34.0:
   version "0.34.0"

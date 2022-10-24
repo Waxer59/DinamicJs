@@ -20,6 +20,7 @@ yarn dev
 * [Monaco editor](https://microsoft.github.io/monaco-editor/)
 * [FontAwesome](https://fontawesome.com/)
 * [SweetAlert2](https://sweetalert2.github.io/)
+* [loop protect](https://www.npmjs.com/package/loop-protect)
 * Sass
 * SplitJs
 * Node

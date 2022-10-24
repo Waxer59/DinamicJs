@@ -12,8 +12,10 @@
     "vite": "^3.0.7"
   },
   "dependencies": {
+    "@babel/standalone": "^7.19.6",
     "@sweetalert2/theme-dark": "^5.0.12",
     "js-base64": "^3.7.2",
+    "loop-protect": "^2.1.6",
     "monaco-editor": "^0.34.0",
     "split.js": "^1.6.5",
     "sweetalert2": "^11.4.33"
