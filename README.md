@@ -23,5 +23,3 @@ yarn dev
 * [loop protect](https://www.npmjs.com/package/loop-protect)
 * Sass
 * SplitJs
-* Node
-* Express
