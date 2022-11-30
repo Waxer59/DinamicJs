@@ -1,5 +1,6 @@
 $principal: #2c2c2c;
 $secondary: #ececec;
+$tertiary: #1c1c1c;
 
 //* Fonts
 
@@ -34,6 +35,72 @@ body {
   height: 100%;
 }
 
+.menu {
+  width: 50px;
+  background: $tertiary;
+  transition: all 0.5s ease;
+  .menu-btn{
+    float: right;
+  }
+  button {
+    transition: all 0.5s ease;
+    width: 50px;
+    height: 50px;
+    background: $tertiary;
+    border: none;
+    color: $secondary;
+    font-size: 20px;
+    cursor: pointer;
+    &:hover {
+      background: $principal;
+      border-radius: 5px;
+    }
+  }
+  .menu-btn-toggle{
+    align-self: flex-end;
+  }
+  ul{
+    font-family: 'Manrope', sans-serif;
+    padding: 0;
+    display: flex;
+    flex-flow: column;
+    list-style: none;
+    li{
+      transition: all 0.5s ease;
+      color: $secondary;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      svg{
+        fill: $secondary;
+        height: 35px;
+      }
+    }
+  }
+  span{
+    opacity: 0;
+    transition: all 0.5s ease;
+    position: absolute;
+    margin-left: 60px;
+  }
+}
+
+.menu-active {
+  width: 250px;
+  .menu-btn{
+    transform: rotate(180deg);
+  }
+  ul{
+    li{
+      padding-left: 10px;
+    }
+  }
+  span {
+    opacity: 1;
+  }
+}
+
 body {
   background: $principal;
   display: flex;
@@ -58,28 +125,6 @@ body {
         border: none;
       }
     }
-  }
-}
-
-.download {
-  cursor: pointer;
-  position: absolute;
-  bottom: 20px;
-  background: #1c1c1c;
-  right: 15px;
-  z-index: 99;
-  border-radius: 100%;
-  color: white;
-  border: none;
-  font-size: 1.5rem;
-  padding: 1rem;
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-  i {
-    color: $secondary;
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-top: 3px;
-    padding-bottom: 3px;
   }
 }
 

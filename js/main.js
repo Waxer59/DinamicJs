@@ -4,11 +4,9 @@ import { encode, decode, isValid } from 'js-base64';
 import Swal from 'sweetalert2';
 import Split from 'split.js';
 import * as Babel from '@babel/standalone/babel';
-import protect from 'loop-protect'
-
+import protect from 'loop-protect';
 
 //* Loop protection
-
 Babel.registerPlugin('loopProtection', protect(100));
 
 const transform = (source) =>
@@ -20,6 +18,7 @@ const transform = (source) =>
 const downloadBtn = document.querySelector('#download-btn');
 
 //* Variables
+const dropArea = document.querySelector('html');
 const { pathname } = window.location;
 const urlCode = pathname.replace(/^./, '');
 var base64Code;
@@ -65,14 +64,14 @@ const update = () => {
 
 const newHtml = () => {
   let js = jsEditor.getValue() ?? '';
-  
+
   //* new url
   base64Code = encode(js);
   window.history.pushState('code', '', `/${base64Code}`); // change url
 
   // Protect infinite loops
   js = transform(js);
-  
+
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -120,28 +119,23 @@ const newHtml = () => {
       </ul>
       </div>
       
-      <script>
+      <script type="module">
       const logger = document.querySelector('#logger');
       logger.innerHTML = '';
-      try {
-        console.stdlog = console.log.bind(console);
-        consoleLogs = [];
-        console.log = function(){
-          consoleLogs.push(Array.from(arguments));
-          // console.stdlog.apply(console, arguments);
-        }
-        ${js}
-        if(consoleLogs){
-          consoleLogs.forEach((log)=>{
-            if(String(log).trim() == ''){
-              return;
-            }
-            logger.innerHTML += '<li><p class="log"> Log: '+log+'</p></li>'
-          })
-        }
-      } catch (error) {
-        console.log(error, 'ERROR')
-        logger.innerHTML = '<li><p class="error">' + error + '</p></li>'
+      let consoleLogs = [];
+      console.stdlog = console.log.bind(console);
+      console.log = function(){
+      consoleLogs.push(Array.from(arguments));
+      // console.stdlog.apply(console, arguments);
+      }
+      ${js}
+      if(consoleLogs){
+        consoleLogs.forEach((log)=>{
+          if(String(log).trim() == ''){
+             return;
+          }
+          logger.innerHTML += '<li><p class="log"> Log: '+log+'</p></li>'
+       })
       }
       </script>
       </body>
@@ -241,3 +235,48 @@ downloadBtn.addEventListener('click', async () => {
     }
   }
 });
+
+//* Drag and drop
+
+dropArea.addEventListener(
+  'drop',
+  async (e) => {
+    e.preventDefault();
+    let file = e.dataTransfer.files[0];
+    if (file.type !== 'application/javascript') {
+      const Toast = Swal.mixin({
+        toast: true,
+        customClass,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+          toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
+      });
+      Toast.fire({
+        icon: 'error',
+        title: "You can't upload this file"
+      });
+      jsEditor.setValue("");
+    }else{
+      let text = await getTextFromFile(file);
+      jsEditor.setValue(text);
+    }
+  },
+  false
+);
+const getTextFromFile = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      resolve(event.target.result);
+    };
+    reader.onerror = (error) => {
+      reject(error);
+    };
+    reader.readAsText(file);
+  });
+};

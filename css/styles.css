@@ -26,6 +26,70 @@ body {
   height: 100%;
 }
 
+.menu {
+  width: 50px;
+  background: #1c1c1c;
+  transition: all 0.5s ease;
+}
+.menu .menu-btn {
+  float: right;
+}
+.menu button {
+  transition: all 0.5s ease;
+  width: 50px;
+  height: 50px;
+  background: #1c1c1c;
+  border: none;
+  color: #ececec;
+  font-size: 20px;
+  cursor: pointer;
+}
+.menu button:hover {
+  background: #2c2c2c;
+  border-radius: 5px;
+}
+.menu .menu-btn-toggle {
+  align-self: flex-end;
+}
+.menu ul {
+  font-family: "Manrope", sans-serif;
+  padding: 0;
+  display: flex;
+  flex-flow: column;
+  list-style: none;
+}
+.menu ul li {
+  transition: all 0.5s ease;
+  color: #ececec;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.menu ul li svg {
+  fill: #ececec;
+  height: 35px;
+}
+.menu span {
+  opacity: 0;
+  transition: all 0.5s ease;
+  position: absolute;
+  margin-left: 60px;
+}
+
+.menu-active {
+  width: 250px;
+}
+.menu-active .menu-btn {
+  transform: rotate(180deg);
+}
+.menu-active ul li {
+  padding-left: 10px;
+}
+.menu-active span {
+  opacity: 1;
+}
+
 body {
   background: #2c2c2c;
   display: flex;
@@ -49,28 +113,6 @@ body .main .output-container .output {
   height: 100%;
   width: 100%;
   border: none;
-}
-
-.download {
-  cursor: pointer;
-  position: absolute;
-  bottom: 20px;
-  background: #1c1c1c;
-  right: 15px;
-  z-index: 99;
-  border-radius: 100%;
-  color: white;
-  border: none;
-  font-size: 1.5rem;
-  padding: 1rem;
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-}
-.download i {
-  color: #ececec;
-  padding-left: 6px;
-  padding-right: 6px;
-  padding-top: 3px;
-  padding-bottom: 3px;
 }
 
 .split {
