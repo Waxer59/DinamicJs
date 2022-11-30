@@ -30,6 +30,9 @@ body {
   width: 50px;
   background: #1c1c1c;
   transition: all 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .menu .menu-btn {
   float: right;
