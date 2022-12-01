@@ -104,6 +104,12 @@ body {
   }
 }
 
+.nav{
+  height: 35px;
+  width: 100%;
+  background: $tertiary;
+}
+
 body {
   background: $principal;
   display: flex;

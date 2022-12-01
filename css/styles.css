@@ -93,6 +93,12 @@ body {
   opacity: 1;
 }
 
+.nav {
+  height: 35px;
+  width: 100%;
+  background: #1c1c1c;
+}
+
 body {
   background: #2c2c2c;
   display: flex;

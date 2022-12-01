@@ -191,6 +191,7 @@ downloadBtn.addEventListener('click', async () => {
   const { value } = await Swal.fire({
     title: 'Enter your file name',
     customClass,
+    heightAuto: false,
     input: 'text',
     inputLabel: `Don't put the extension`,
     showCloseButton: true,
@@ -224,11 +225,13 @@ downloadBtn.addEventListener('click', async () => {
       download(filename, text);
 
       Toast.fire({
+        heightAuto: false,
         icon: 'success',
         title: 'File downloaded'
       });
     } catch (error) {
       Toast.fire({
+        heightAuto: false,
         icon: 'error',
         title: error
       });
@@ -258,6 +261,7 @@ dropArea.addEventListener(
         }
       });
       Toast.fire({
+        heightAuto: false,
         icon: 'error',
         title: "You can't upload this file"
       });
