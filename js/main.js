@@ -243,7 +243,8 @@ dropArea.addEventListener(
   async (e) => {
     e.preventDefault();
     let file = e.dataTransfer.files[0];
-    if (file.type !== 'application/javascript') {
+    if (file.type !== 'text/javascript') {
+      console.log(file.type);
       const Toast = Swal.mixin({
         toast: true,
         customClass,
