@@ -23,3 +23,4 @@ yarn dev
 * [loop protect](https://www.npmjs.com/package/loop-protect)
 * SplitJs
 * React
+* Redux
