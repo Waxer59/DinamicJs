@@ -1,12 +1,12 @@
 @font-face {
   font-family: "JetBrains Mono";
-  src: url(../fonts/JetBrainsMono[wght].ttf);
+  src: url(../src/assets/fonts/JetBrainsMono[wght].ttf);
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: "JetBrains Mono";
-  src: url(../fonts/JetBrainsMono-Italic[wght].ttf);
+  src: url(../src/assets/fonts/JetBrainsMono-Italic[wght].ttf);
   font-weight: normal;
   font-style: italic;
 }
@@ -24,6 +24,11 @@
 html,
 body {
   height: 100%;
+}
+
+#root{
+  height: 100%;
+  width: 100%;
 }
 
 .menu {
@@ -105,6 +110,7 @@ body {
 }
 body .main {
   width: 100%;
+  height: 100%;
   display: flex;
   overflow: hidden;
 }
@@ -122,6 +128,10 @@ body .main .output-container .output {
   height: 100%;
   width: 100%;
   border: none;
+}
+
+.code-container{
+  width: 50%;
 }
 
 .split {
@@ -143,5 +153,3 @@ body .main .output-container .output {
 ::-webkit-scrollbar {
   display: none;
 }
-
-/*# sourceMappingURL=styles.css.map */

@@ -21,5 +21,5 @@ yarn dev
 * [FontAwesome](https://fontawesome.com/)
 * [SweetAlert2](https://sweetalert2.github.io/)
 * [loop protect](https://www.npmjs.com/package/loop-protect)
-* Sass
 * SplitJs
+* React
