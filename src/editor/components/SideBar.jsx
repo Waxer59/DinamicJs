@@ -2,6 +2,10 @@ import { useState } from 'react';
 
 export const SideBar = () => {
   const [menuActive, setMenuActive] = useState(false);
+
+  const onSkypackClick = () => {
+    window.open("https://www.skypack.dev/", '_blank', 'noopener,noreferrer');
+  };
   return (
     <aside className={`menu ${menuActive ? 'menu-active' : ''}`} id="menu">
       <header>
@@ -16,19 +20,19 @@ export const SideBar = () => {
             </button>
           </li>
           <li key={1}>
-            <button id="upload-btn">
+            <button>
               <i className="fa-solid fa-upload"></i>
             </button>
             <span>Upload</span>
           </li>
           <li key={2}>
-            <button id="download-btn">
+            <button>
               <i className="fa-solid fa-file-arrow-down"></i>
             </button>
             <span>Download</span>
           </li>
           <li key={3}>
-            <button id="skypack-btn">
+            <button onClick={onSkypackClick}>
               <svg
                 role="img"
                 viewBox="0 0 24 24"
@@ -39,12 +43,18 @@ export const SideBar = () => {
             </button>
             <span>Skypack</span>
           </li>
+          <li key={4}>
+            <button>
+            <i className="fa-solid fa-face-smile"></i>
+            </button>
+            <span>Emojis</span>
+          </li>
         </ul>
       </header>
       <footer>
         <ul>
-          <li className="settings">
-            <button id="settings-btn">
+          <li className="settings" key={5}>
+            <button>
               <i className="fa-solid fa-gear"></i>
             </button>
             <span>Settings</span>
