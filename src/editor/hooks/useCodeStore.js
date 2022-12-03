@@ -1,16 +1,22 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addCode } from '../../store/slices/code/codeSlice';
+import { addCode, setActiveCode } from '../../store/slices/code/codeSlice';
 
-export const useCodeStore = (text = '') => {
+export const useCodeStore = () => {
   const dispatch = useDispatch();
-  const { code } = useSelector((state) => state.code);
+  const { code, activeCode } = useSelector((state) => state.code);
 
-  const setCode = (text) => {
+  const onSetCode = (text) => {
     dispatch(addCode(text));
   };
 
+  const onSetActiveCode = (text) => {
+    dispatch(setActiveCode(text));
+  }
+
   return {
-    setCode,
-    code
+    onSetCode,
+    onSetActiveCode,
+    activeCode,
+    code,
   };
 };

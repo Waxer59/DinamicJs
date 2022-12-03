@@ -55,7 +55,7 @@ export const SideBar = () => {
         <ul>
           <li className="settings" key={5}>
             <button>
-              <i className="fa-solid fa-gear"></i>
+              <i className="fa-solid fa-gear settings"></i>
             </button>
             <span>Settings</span>
           </li>

@@ -1,8 +1,9 @@
 import * as Babel from '@babel/standalone/babel';
 import protect from 'loop-protect';
 
-export const useProtectCode = (code = '') => {
-  Babel.registerPlugin('loopProtection', protect(100));
+Babel.registerPlugin('loopProtection', protect(100));
+
+export const useProtectCode = () => {
 
   const transform = (source) =>
     Babel.transform(source, {

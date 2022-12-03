@@ -171,7 +171,7 @@ const jsEditor = monaco.editor.create(code, {
 });
 
 jsEditor.onDidChangeModelContent(update);
-
+jsEditor
 //* SplitJS
 
 Split(['#code-container', '#output-container']);

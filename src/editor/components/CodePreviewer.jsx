@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
 import { useCodePreviewer } from '../hooks/useCodePreviewer';
 import { useCodeStore } from '../hooks/useCodeStore';
+import { useProtectCode } from '../hooks/useProtectCode';
 
 export const CodePreviewer = () => {
   const preview = useRef(null);
-  const { code } = useCodeStore();
-  const { update } = useCodePreviewer(code, preview.current);
+  const { activeCode } = useCodeStore();
+  const [codes, setCodes] = useState(activeCode);
+  const { protectCode } = useProtectCode();
+  const { update } = useCodePreviewer();
+
   useEffect(() => {
-    update();
+    update(preview.current, codes);
   }, []);
+
+  useEffect(() => {
+    setCodes(() => protectCode(activeCode));
+    update(preview.current, codes);
+  }, [activeCode]);
 
   return <iframe className="output" ref={preview}></iframe>;
 };

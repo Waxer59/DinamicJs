@@ -1,10 +1,12 @@
 import { useRef, useState, useEffect } from 'react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { useRouteUrl } from '../hooks/useRouteUrl';
+import { useCodeStore } from '../hooks/useCodeStore';
 
 export const Editor = () => {
   const [editor, setEditor] = useState(null);
   const { decodeText, saveCodeUrl } = useRouteUrl();
+  const { onSetActiveCode } = useCodeStore();
   const [code, setCode] = useState(decodeText);
   const monacoEl = useRef(null);
 
@@ -31,15 +33,18 @@ export const Editor = () => {
         })
       );
     }
+    if (editor) {
+      editor.onDidChangeModelContent(() => {
+        setCode(editor.getValue());
+      });
+    }
     return () => editor?.dispose();
   }, [monacoEl.current]);
 
-  const updateCode = (code) => {
-    setCode(code);
-    saveCodeUrl(code);
-  };
-
-//   editor.onDidChangeModelContent(updateCode);
+  useEffect(() => {
+    onSetActiveCode(code);
+    console.log(code);
+  }, [code]);
 
   return <div className="code" ref={monacoEl}></div>;
 };

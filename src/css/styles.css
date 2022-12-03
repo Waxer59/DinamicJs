@@ -1,11 +1,11 @@
 @font-face {
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   src: url(../src/assets/fonts/JetBrainsMono[wght].ttf);
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   src: url(../src/assets/fonts/JetBrainsMono-Italic[wght].ttf);
   font-weight: normal;
   font-style: italic;
@@ -26,7 +26,7 @@ body {
   height: 100%;
 }
 
-#root{
+#root {
   height: 100%;
   width: 100%;
 }
@@ -60,7 +60,7 @@ body {
   align-self: flex-end;
 }
 .menu ul {
-  font-family: "Manrope", sans-serif;
+  font-family: 'Manrope', sans-serif;
   padding: 0;
   display: flex;
   flex-flow: column;
@@ -130,7 +130,7 @@ body {
   border: none;
 }
 
-.code-container{
+.code-container {
   width: 50%;
 }
 
@@ -146,11 +146,19 @@ body {
 }
 
 .gutter.gutter-horizontal {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
   cursor: col-resize;
   height: 100%;
 }
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.settings {
+  transition: all 0.3s ease;
+}
+
+.settings:hover i {
+  transform: rotate(-90deg);
 }

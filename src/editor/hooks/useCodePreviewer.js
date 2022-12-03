@@ -1,11 +1,11 @@
-export const useCodePreviewer = (code, output) => {
-  const update = () => {
+export const useCodePreviewer = () => {
+  const update = (output, code) => {
     try {
-      output.setAttribute('srcdoc', newHtml());
+      output.setAttribute('srcdoc', newHtml(code));
     } catch (error) {}
   };
 
-  const newHtml = () => {
+  const newHtml = (code) => {
     return `
     <!DOCTYPE html>
     <html lang="en">
