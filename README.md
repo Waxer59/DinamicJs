@@ -24,3 +24,4 @@ yarn dev
 * SplitJs
 * React
 * Redux
+* Emoji mart

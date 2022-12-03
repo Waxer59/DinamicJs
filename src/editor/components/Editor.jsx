@@ -43,7 +43,6 @@ export const Editor = () => {
 
   useEffect(() => {
     onSetActiveCode(code);
-    console.log(code);
   }, [code]);
 
   return <div className="code" ref={monacoEl}></div>;

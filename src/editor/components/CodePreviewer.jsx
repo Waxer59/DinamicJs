@@ -9,6 +9,7 @@ export const CodePreviewer = () => {
   const preview = useRef(null);
   const { activeCode } = useCodeStore();
   const [codes, setCodes] = useState(activeCode);
+
   const { protectCode } = useProtectCode();
   const { update } = useCodePreviewer();
 
@@ -18,8 +19,11 @@ export const CodePreviewer = () => {
 
   useEffect(() => {
     setCodes(() => protectCode(activeCode));
-    update(preview.current, codes);
   }, [activeCode]);
+
+  useEffect(() => {
+    update(preview.current, codes);
+  }, [codes]);
 
   return <iframe className="output" ref={preview}></iframe>;
 };

@@ -69,7 +69,6 @@ body {
 .menu ul li {
   transition: all 0.5s ease;
   color: #ececec;
-  display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
@@ -161,4 +160,17 @@ body {
 
 .settings:hover i {
   transform: rotate(-90deg);
+}
+
+.handle:hover {
+  cursor: move;
+}
+
+.handle {
+  z-index: 100;
+  position: absolute;
+}
+
+.EmojiPickerReact {
+  --epr-picker-height: 500px;
 }

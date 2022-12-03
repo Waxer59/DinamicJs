@@ -1,11 +1,25 @@
 import { useState } from 'react';
+import EmojiPicker from 'emoji-picker-react';
+import Draggable from 'react-draggable';
+import { useCodeStore } from '../hooks/useCodeStore';
 
 export const SideBar = () => {
   const [menuActive, setMenuActive] = useState(false);
+  const [emojisMenu, setEmojisMenu] = useState(false);
+  const { onSetActiveCode, activeCode } = useCodeStore();
 
   const onSkypackClick = () => {
-    window.open("https://www.skypack.dev/", '_blank', 'noopener,noreferrer');
+    window.open('https://www.skypack.dev/', '_blank', 'noopener,noreferrer');
   };
+
+  const onEmojisClick = () => {
+    setEmojisMenu(!emojisMenu);
+  };
+
+  const onEmojiClick = (emojiData, event) => {
+    onSetActiveCode(activeCode + emojiData.emoji);
+  };
+
   return (
     <aside className={`menu ${menuActive ? 'menu-active' : ''}`} id="menu">
       <header>
@@ -44,10 +58,26 @@ export const SideBar = () => {
             <span>Skypack</span>
           </li>
           <li key={4}>
-            <button>
-            <i className="fa-solid fa-face-smile"></i>
+            <button onClick={onEmojisClick}>
+              <i className="fa-solid fa-face-smile"></i>
             </button>
             <span>Emojis</span>
+            {emojisMenu ? (
+              <Draggable
+                handle=".handle"
+                defaultPosition={{ x: 100, y: 0 }}
+                scale={1}
+              >
+                <div className="handle emojis">
+                  <EmojiPicker
+                    className="handle"
+                    autoFocusSearch={true}
+                    theme="dark"
+                    onEmojiClick={onEmojiClick}
+                  />
+                </div>
+              </Draggable>
+            ) : null}
           </li>
         </ul>
       </header>
