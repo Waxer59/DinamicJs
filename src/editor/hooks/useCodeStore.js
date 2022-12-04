@@ -9,7 +9,9 @@ export const useCodeStore = () => {
   const { code, activeCode } = useSelector((state) => state.code);
 
   useEffect(() => {
-    saveCodeUrl(activeCode);
+    if (activeCode !== null) {
+      saveCodeUrl(activeCode);
+    }
   }, [activeCode]);
 
   const onSetCode = (text) => {

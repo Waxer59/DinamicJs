@@ -7,14 +7,13 @@ export const Editor = () => {
   const [editor, setEditor] = useState(null);
   const { decodeText } = useRouteUrl();
   const { onSetActiveCode, activeCode } = useCodeStore();
-  const [code, setCode] = useState(decodeText());
   const monacoEl = useRef(null);
 
   useEffect(() => {
     if (monacoEl.current && !editor) {
       setEditor(
         monaco.editor.create(monacoEl.current, {
-          value: code,
+          value: activeCode,
           language: 'javascript',
           theme: 'vs-dark',
           mouseWheelZoom: true,
@@ -35,15 +34,17 @@ export const Editor = () => {
     }
     if (editor) {
       editor.onDidChangeModelContent(() => {
-        setCode(editor.getValue());
+        onSetActiveCode(editor.getValue());
       });
     }
     return () => editor?.dispose();
   }, [monacoEl.current]);
 
   useEffect(() => {
-    onSetActiveCode(code);
-  }, [code]);
+    if (editor) {
+      editor.setValue(activeCode);
+    }
+  }, [activeCode]);
 
   return <div className="code" ref={monacoEl}></div>;
 };

@@ -1,22 +1,22 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from 'react-router-dom';
 import { encode, decode, isValid } from 'js-base64';
 
 export const useRouteUrl = () => {
-    const { code } = useParams();
-    const navigate = useNavigate();
+  const { code } = useParams();
+  const navigate = useNavigate();
 
-    const decodeText = () => {
-        let decodedText = isValid(code) ? decode(code) : "";
-        return decodedText;
-    }
-    
-    const saveCodeUrl = (text) => {
-        let encodedText = encode(text);
-        navigate(`/${encodedText}`);
-    }
+  const decodeText = () => {
+    let decodedText = isValid(code) ? decode(code) : '';
+    return decodedText;
+  };
 
-    return{
-        decodeText,
-        saveCodeUrl
-    }
+  const saveCodeUrl = (text) => {
+    let encodedText = encode(text);
+    navigate(`/${encodedText}`);
+  };
+
+  return {
+    decodeText,
+    saveCodeUrl
+  };
 };
