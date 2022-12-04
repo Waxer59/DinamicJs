@@ -6,18 +6,47 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^3.0.7"
+    "preview": "vite preview",
+    "prepare": "husky install",
+    "lint": "eslint \"{src,test}/**/*.{js,jsx}\" --fix"
   },
   "dependencies": {
-    "@babel/standalone": "^7.19.6",
-    "@sweetalert2/theme-dark": "^5.0.12",
-    "js-base64": "^3.7.2",
+    "@babel/standalone": "^7.20.6",
+    "@reduxjs/toolkit": "^1.9.1",
+    "@sweetalert2/theme-dark": "^5.0.15",
+    "downloadjs": "^1.4.7",
+    "eslint": "^8.0.1",
+    "js-base64": "^3.7.3",
     "loop-protect": "^2.1.6",
-    "monaco-editor": "^0.34.0",
-    "split.js": "^1.6.5",
-    "sweetalert2": "^11.4.33"
+    "monaco-editor": "^0.34.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.4.4",
+    "react-split": "^2.0.14",
+    "sweetalert2": "^11.6.15"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
+    "@vitejs/plugin-react": "^2.2.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.4",
+    "prettier": "^2.8.0",
+    "prop-types": "^15.8.1",
+    "vite": "^3.2.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint . --fix",
+    "*.{js,html,md,scss,css,jsx}": "prettier --write"
   }
 }
