@@ -6,12 +6,12 @@ export const useRouteUrl = () => {
   const navigate = useNavigate();
 
   const decodeText = () => {
-    let decodedText = isValid(code) ? decode(code) : '';
+    const decodedText = isValid(code) ? decode(code) : '';
     return decodedText;
   };
 
   const saveCodeUrl = (text) => {
-    let encodedText = encode(text);
+    const encodedText = encode(text);
     navigate(`/${encodedText}`);
   };
 

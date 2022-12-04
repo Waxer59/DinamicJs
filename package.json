@@ -6,12 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky install",
+    "lint": "eslint \"{src,test}/**/*.{js,jsx}\" --fix"
   },
   "dependencies": {
     "@babel/standalone": "^7.20.6",
     "@reduxjs/toolkit": "^1.9.1",
     "@sweetalert2/theme-dark": "^5.0.15",
+    "eslint": "^8.0.1",
     "js-base64": "^3.7.3",
     "loop-protect": "^2.1.6",
     "monaco-editor": "^0.34.1",
@@ -26,6 +29,21 @@
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.4",
+    "prettier": "^2.8.0",
     "vite": "^3.2.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint . --fix",
+    "*.{js,html,md,scss,css,jsx}": "prettier --write"
   }
 }

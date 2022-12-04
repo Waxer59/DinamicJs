@@ -1,4 +1,4 @@
-import { useProtectCode } from "./useProtectCode";
+import { useProtectCode } from './useProtectCode';
 
 export const useCodePreviewer = () => {
   const { protectCode } = useProtectCode();

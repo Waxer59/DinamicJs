@@ -2,11 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const settingsSlice = createSlice({
   name: 'settings',
-  initialState: {
-  },
+  initialState: {},
   reducers: {
-
+    setSettings: (state, action) => {
+      state = action.payload;
+    }
   }
 });
 
-export const {  } = settingsSlice.actions;
+export const { setSettings } = settingsSlice.actions;
