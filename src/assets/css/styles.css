@@ -1,3 +1,14 @@
+html.dark:root {
+  --primary-color: #2c2c2c;
+  --secondary-color: #1c1c1c;
+  --tertiary-color: #ececec;
+}
+
+html.light:root {
+  --primary-color: #f2f2f2;
+  --secondary-color: #f2f2f2;
+  --tertiary-color: #2c2c2c;
+}
 @font-face {
   font-family: 'JetBrains Mono';
   src: url(/fonts/JetBrainsMono[wght].ttf);
@@ -13,8 +24,8 @@
 .alerts {
   font-family: Arial, Helvetica, sans-serif !important;
   border-radius: 5px !important;
-  color: #ececec !important;
-  background: #2c2c2c !important;
+  color: var(--tertiary-color) !important;
+  background: var(--primary-color) !important;
 }
 
 * {
@@ -33,7 +44,7 @@ body {
 
 .menu {
   width: 50px;
-  background: #1c1c1c;
+  background: var(--secondary-color);
   transition: all 0.5s ease;
   display: flex;
   flex-direction: column;
@@ -46,14 +57,14 @@ body {
   transition: all 0.5s ease;
   width: 50px;
   height: 50px;
-  background: #1c1c1c;
+  background: var(--secondary-color);
   border: none;
-  color: #ececec;
+  color: var(--tertiary-color);
   font-size: 20px;
   cursor: pointer;
 }
 .menu button:hover {
-  background: #2c2c2c;
+  background: var(--primary-color);
 }
 .menu .menu-btn-toggle {
   align-self: flex-end;
@@ -67,14 +78,14 @@ body {
 }
 .menu ul li {
   transition: all 0.5s ease;
-  color: #ececec;
+  color: var(--tertiary-color);
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
 }
 .menu ul li svg {
-  fill: #ececec;
+  fill: var(--tertiary-color);
   height: 35px;
 }
 .menu span {
@@ -86,11 +97,11 @@ body {
 .nav {
   height: 35px;
   width: 100%;
-  background: #1c1c1c;
+  background: var(--secondary-color);
 }
 
 #root {
-  background: #2c2c2c;
+  background: var(--primary-color);
   display: flex;
 }
 #root .main {
@@ -125,7 +136,7 @@ body {
 }
 
 .gutter {
-  background-color: #1c1c1c;
+  background-color: var(--secondary-color);
   background-repeat: no-repeat;
   background-position: 50%;
 }
