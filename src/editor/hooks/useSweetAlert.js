@@ -151,7 +151,6 @@ export const useSweetAlert = () => {
         </div>
           `,
       showCloseButton: true,
-      showLoaderOnConfirm: true,
       showCancelButton: true,
       preConfirm: () => {
         const theme =
@@ -185,6 +184,7 @@ export const useSweetAlert = () => {
     });
     return { ...value };
   };
+
   return {
     throwToast,
     throwAlert,

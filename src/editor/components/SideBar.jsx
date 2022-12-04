@@ -27,15 +27,19 @@ export const SideBar = () => {
     onSetSettings(await throwConfig(settings));
   };
 
+  // const onUploadClick = () => {
+  //   throwUpload();
+  // };
+
   return (
     <aside className="menu" id="menu">
       <header>
         <ul style={{ marginTop: '35px' }}>
-          <li key={1}>
-            <button title="Upload">
+          {/* <li key={1}>
+            <button title="Upload" onClick={onUploadClick}>
               <i className="fa-solid fa-upload"></i>
             </button>
-          </li>
+          </li> */}
           <li key={2} onClick={onDownloadClick}>
             <button title="Download">
               <i className="fa-solid fa-file-arrow-down"></i>
