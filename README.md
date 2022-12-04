@@ -1,4 +1,4 @@
-# DinamicJs
+# DinamicJs Version 2.0.0
 
 It is an application that runs js in real time, its console is displayed on the right where you can see the logs,
 all the code is serialized in the url in base64 to be able to share or save it.
@@ -24,4 +24,5 @@ yarn dev
 * SplitJs
 * React
 * Redux
-* Emoji mart
+* React draggable
+* Emoji picker react

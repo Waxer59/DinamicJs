@@ -4,7 +4,7 @@ export const codeSlice = createSlice({
   name: 'code',
   initialState: {
     code: [],
-    activeCode: null
+    activeCode: ""
   },
   reducers: {
     addCode: (state, action) => {

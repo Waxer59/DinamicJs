@@ -5,9 +5,9 @@ import { useCodeStore } from '../hooks/useCodeStore';
 
 export const Editor = () => {
   const [editor, setEditor] = useState(null);
-  const { decodeText, saveCodeUrl } = useRouteUrl();
-  const { onSetActiveCode } = useCodeStore();
-  const [code, setCode] = useState(decodeText);
+  const { decodeText } = useRouteUrl();
+  const { onSetActiveCode, activeCode } = useCodeStore();
+  const [code, setCode] = useState(decodeText());
   const monacoEl = useRef(null);
 
   useEffect(() => {

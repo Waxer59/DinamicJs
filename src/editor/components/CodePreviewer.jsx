@@ -8,22 +8,22 @@ import { useProtectCode } from '../hooks/useProtectCode';
 export const CodePreviewer = () => {
   const preview = useRef(null);
   const { activeCode } = useCodeStore();
-  const [codes, setCodes] = useState(activeCode);
+  const [code, setCode] = useState(activeCode);
 
   const { protectCode } = useProtectCode();
   const { update } = useCodePreviewer();
 
   useEffect(() => {
-    update(preview.current, codes);
+    update(preview.current, code);
   }, []);
 
   useEffect(() => {
-    setCodes(() => protectCode(activeCode));
+    setCode(activeCode);
   }, [activeCode]);
 
   useEffect(() => {
-    update(preview.current, codes);
-  }, [codes]);
+    update(preview.current, code);
+  }, [code]);
 
   return <iframe className="output" ref={preview}></iframe>;
 };

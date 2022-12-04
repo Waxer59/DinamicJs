@@ -59,9 +59,7 @@ export const useCodePreviewer = () => {
             consoleLogs.push(Array.from(arguments));
             // console.stdlog.apply(console, arguments);
             }
-            try{
-              ${console.log(code)}
-            }catch(e){}
+            ${code}
             if(consoleLogs){
               consoleLogs.forEach((log)=>{
                 if(String(log).trim() == ''){
