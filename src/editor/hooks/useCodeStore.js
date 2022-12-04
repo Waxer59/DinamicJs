@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addCodeTabs,
@@ -6,20 +5,12 @@ import {
   setActiveCode,
   setUploadedCode
 } from '../../store/slices/code/codeSlice';
-import { useRouteUrl } from './useRouteUrl';
 
 export const useCodeStore = () => {
   const dispatch = useDispatch();
-  const { saveCodeUrl } = useRouteUrl();
   const { codeTabs, activeCode, uploadedCode } = useSelector(
     (state) => state.code
   );
-
-  useEffect(() => {
-    if (activeCode !== null) {
-      saveCodeUrl(activeCode);
-    }
-  }, [activeCode]);
 
   const onSetCodeTabs = (text) => {
     dispatch(addCodeTabs(text));

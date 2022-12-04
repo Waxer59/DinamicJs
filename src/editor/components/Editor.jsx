@@ -6,8 +6,8 @@ import { useSettingsStore } from '../hooks/useSettingsStore';
 
 export const Editor = () => {
   const [editor, setEditor] = useState(null);
-  const { decodeText } = useRouteUrl();
-  const { onSetActiveCode, uploadedCode } = useCodeStore();
+  const { decodeText, saveCodeUrl } = useRouteUrl();
+  const { onSetActiveCode, uploadedCode, activeCode } = useCodeStore();
   const { settings } = useSettingsStore();
   const monacoEl = useRef(null);
 
@@ -42,6 +42,12 @@ export const Editor = () => {
   useEffect(() => {
     editor?.updateOptions(settings);
   }, [settings]);
+
+  useEffect(() => {
+    if (activeCode !== null) {
+      saveCodeUrl(activeCode);
+    }
+  }, [activeCode]);
 
   return <div className="code" ref={monacoEl}></div>;
 };
