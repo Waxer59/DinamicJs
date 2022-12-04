@@ -1,12 +1,12 @@
 @font-face {
   font-family: 'JetBrains Mono';
-  src: url(../src/assets/fonts/JetBrainsMono[wght].ttf);
+  src: url(public/fonts/JetBrainsMono[wght].ttf);
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'JetBrains Mono';
-  src: url(../src/assets/fonts/JetBrainsMono-Italic[wght].ttf);
+  src: url(public/fonts/JetBrainsMono-Italic[wght].ttf);
   font-weight: normal;
   font-style: italic;
 }
@@ -69,6 +69,7 @@ body {
 .menu ul li {
   transition: all 0.5s ease;
   color: #ececec;
+  display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
@@ -162,20 +163,3 @@ body {
   transform: rotate(90deg);
 }
 
-.handle:hover {
-  cursor: move;
-}
-
-.handle {
-  z-index: 100;
-  position: absolute;
-}
-
-.EmojiPickerReact {
-  --epr-picker-height: 500px;
-}
-
-.label-container{
-  display: flex;
-  align-items: center;
-}

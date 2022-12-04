@@ -1,7 +1,11 @@
+import { useProtectCode } from "./useProtectCode";
+
 export const useCodePreviewer = () => {
+  const { protectCode } = useProtectCode();
+
   const update = (output, code) => {
     try {
-      output.setAttribute('srcdoc', newHtml(code));
+      output.setAttribute('srcdoc', newHtml(protectCode(code)));
     } catch (error) {}
   };
 

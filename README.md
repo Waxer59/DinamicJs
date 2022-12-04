@@ -24,5 +24,3 @@ yarn dev
 * SplitJs
 * React
 * Redux
-* React draggable
-* Emoji picker react

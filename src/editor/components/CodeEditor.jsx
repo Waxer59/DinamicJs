@@ -13,6 +13,7 @@ export const CodeEditor = () => {
   useEffect(() => {
     onSetActiveCode(decodeText());
   }, []);
+  
   return (
     <main className="main">
       <Split style={{ display: 'flex', width: '100%' }} sizes={[50, 50]}>

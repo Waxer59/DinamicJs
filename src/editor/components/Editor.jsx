@@ -6,14 +6,14 @@ import { useCodeStore } from '../hooks/useCodeStore';
 export const Editor = () => {
   const [editor, setEditor] = useState(null);
   const { decodeText } = useRouteUrl();
-  const { onSetActiveCode, activeCode } = useCodeStore();
+  const { onSetActiveCode } = useCodeStore();
   const monacoEl = useRef(null);
 
   useEffect(() => {
     if (monacoEl.current && !editor) {
       setEditor(
         monaco.editor.create(monacoEl.current, {
-          value: activeCode,
+          value: decodeText(),
           language: 'javascript',
           theme: 'vs-dark',
           mouseWheelZoom: true,
@@ -39,12 +39,6 @@ export const Editor = () => {
     }
     return () => editor?.dispose();
   }, [monacoEl.current]);
-
-  useEffect(() => {
-    if (editor) {
-      editor.setValue(activeCode);
-    }
-  }, [activeCode]);
 
   return <div className="code" ref={monacoEl}></div>;
 };

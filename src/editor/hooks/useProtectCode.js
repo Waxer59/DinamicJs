@@ -9,7 +9,11 @@ export const useProtectCode = () => {
     }).code;
 
   const protectCode = (code) => {
-    return transform(code);
+    let codeToProtect = code;
+    try {
+      codeToProtect = transform(code);
+    } catch (error) {}
+    return codeToProtect;
   };
 
   return {
