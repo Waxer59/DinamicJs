@@ -1,10 +1,13 @@
 import { useSweetAlert } from '../hooks/useSweetAlert';
 import downloadjs from 'downloadjs';
 import { useCodeStore } from '../hooks/useCodeStore';
+import { useSettingsStore } from '../hooks/useSettingsStore';
 
 export const SideBar = () => {
-  const { throwAlert } = useSweetAlert();
+  const { throwAlert, throwConfig } = useSweetAlert();
+  const { settings, onSetSettings } = useSettingsStore();
   const { activeCode } = useCodeStore();
+
   const onSkypackClick = () => {
     window.open('https://www.skypack.dev/', '_blank', 'noopener,noreferrer');
   };
@@ -18,6 +21,10 @@ export const SideBar = () => {
     if (fileName) {
       downloadjs(activeCode, `${fileName}.js`, 'text/javascript');
     }
+  };
+
+  const onConfigClick = async () => {
+    onSetSettings(await throwConfig(settings));
   };
 
   return (
@@ -49,7 +56,7 @@ export const SideBar = () => {
       <footer>
         <ul>
           <li className="settings" key={5} title="settings">
-            <button>
+            <button onClick={onConfigClick}>
               <i className="fa-solid fa-gear settings"></i>
             </button>
             <span>Settings</span>
