@@ -1,12 +1,12 @@
 @font-face {
   font-family: 'JetBrains Mono';
-  src: url(public/fonts/JetBrainsMono[wght].ttf);
+  src: url(/fonts/JetBrainsMono[wght].ttf);
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'JetBrains Mono';
-  src: url(public/fonts/JetBrainsMono-Italic[wght].ttf);
+  src: url(/fonts/JetBrainsMono-Italic[wght].ttf);
   font-weight: normal;
   font-style: italic;
 }
@@ -54,7 +54,6 @@ body {
 }
 .menu button:hover {
   background: #2c2c2c;
-  border-radius: 5px;
 }
 .menu .menu-btn-toggle {
   align-self: flex-end;
@@ -84,20 +83,6 @@ body {
   position: absolute;
   margin-left: 60px;
 }
-
-.menu-active {
-  width: 250px;
-}
-.menu-active .menu-btn {
-  transform: rotate(180deg);
-}
-.menu-active ul li {
-  padding-left: 10px;
-}
-.menu-active span {
-  opacity: 1;
-}
-
 .nav {
   height: 35px;
   width: 100%;
@@ -161,4 +146,11 @@ body {
 
 .settings:hover i {
   transform: rotate(90deg);
+}
+
+.dropZone {
+  position: absolute !important;
+  z-index: 100;
+  width: 100vw !important;
+  height: 100vh !important;
 }

@@ -1,12 +1,19 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCode, setActiveCode } from '../../store/slices/code/codeSlice';
+import {
+  addCodeTabs,
+  resetUploadedCode,
+  setActiveCode,
+  setUploadedCode
+} from '../../store/slices/code/codeSlice';
 import { useRouteUrl } from './useRouteUrl';
 
 export const useCodeStore = () => {
   const dispatch = useDispatch();
   const { saveCodeUrl } = useRouteUrl();
-  const { code, activeCode } = useSelector((state) => state.code);
+  const { codeTabs, activeCode, uploadedCode } = useSelector(
+    (state) => state.code
+  );
 
   useEffect(() => {
     if (activeCode !== null) {
@@ -14,18 +21,25 @@ export const useCodeStore = () => {
     }
   }, [activeCode]);
 
-  const onSetCode = (text) => {
-    dispatch(addCode(text));
+  const onSetCodeTabs = (text) => {
+    dispatch(addCodeTabs(text));
   };
 
   const onSetActiveCode = (text) => {
     dispatch(setActiveCode(text));
   };
 
+  const onSetUploadedCode = (text) => {
+    dispatch(setUploadedCode(text));
+    dispatch(resetUploadedCode());
+  };
+
   return {
-    onSetCode,
+    onSetCodeTabs,
     onSetActiveCode,
+    onSetUploadedCode,
+    uploadedCode,
     activeCode,
-    code
+    codeTabs
   };
 };

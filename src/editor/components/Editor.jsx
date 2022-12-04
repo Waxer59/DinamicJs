@@ -6,7 +6,7 @@ import { useCodeStore } from '../hooks/useCodeStore';
 export const Editor = () => {
   const [editor, setEditor] = useState(null);
   const { decodeText } = useRouteUrl();
-  const { onSetActiveCode } = useCodeStore();
+  const { onSetActiveCode, uploadedCode } = useCodeStore();
   const monacoEl = useRef(null);
 
   useEffect(() => {
@@ -39,6 +39,12 @@ export const Editor = () => {
     }
     return () => editor?.dispose();
   }, [monacoEl.current]);
+
+  useEffect(() => {
+    if (editor) {
+      editor.setValue(uploadedCode);
+    }
+  }, [uploadedCode]);
 
   return <div className="code" ref={monacoEl}></div>;
 };

@@ -5,7 +5,7 @@ export const AppRouter = () => {
   return (
     <Routes>
       <Route path="/:code" element={<EditorPage />} />
-      <Route path="/" element={<EditorPage />} />
+      <Route path="/*" element={<EditorPage />} />
     </Routes>
   );
 };

@@ -3,17 +3,29 @@ import { createSlice } from '@reduxjs/toolkit';
 export const codeSlice = createSlice({
   name: 'code',
   initialState: {
-    code: [],
-    activeCode: null
+    codeTabs: [],
+    activeCode: null,
+    uploadedCode: null
   },
   reducers: {
-    addCode: (state, action) => {
-      state.code.push(action.payload);
+    addCodeTabs: (state, action) => {
+      state.codeTabs.push(action.payload);
     },
     setActiveCode: (state, action) => {
       state.activeCode = action.payload;
+    },
+    setUploadedCode: (state, action) => {
+      state.uploadedCode = action.payload;
+    },
+    resetUploadedCode: (state) => {
+      state.uploadedCode = null;
     }
   }
 });
 
-export const { addCode, setActiveCode } = codeSlice.actions;
+export const {
+  addCodeTabs,
+  setActiveCode,
+  setUploadedCode,
+  resetUploadedCode
+} = codeSlice.actions;
