@@ -15,7 +15,9 @@ export const SideBar = () => {
       'Dont put any extension',
       'info'
     );
-    downloadjs(activeCode, `${fileName}.js`, 'text/javascript');
+    if (fileName) {
+      downloadjs(activeCode, `${fileName}.js`, 'text/javascript');
+    }
   };
 
   return (
