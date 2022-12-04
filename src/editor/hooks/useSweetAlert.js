@@ -26,10 +26,11 @@ export const useSweetAlert = () => {
     });
   };
 
-  const throwAlert = async (title, inputLabel) => {
+  const throwAlert = async (title, inputLabel, icon) => {
     const { value } = await Swal.fire({
       title,
       customClass,
+      icon,
       heightAuto: false,
       input: 'text',
       inputLabel,

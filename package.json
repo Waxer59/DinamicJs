@@ -14,6 +14,7 @@
     "@babel/standalone": "^7.20.6",
     "@reduxjs/toolkit": "^1.9.1",
     "@sweetalert2/theme-dark": "^5.0.15",
+    "downloadjs": "^1.4.7",
     "eslint": "^8.0.1",
     "js-base64": "^3.7.3",
     "loop-protect": "^2.1.6",

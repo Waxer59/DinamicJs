@@ -1,6 +1,21 @@
+import { useSweetAlert } from '../hooks/useSweetAlert';
+import downloadjs from 'downloadjs';
+import { useCodeStore } from '../hooks/useCodeStore';
+
 export const SideBar = () => {
+  const { throwAlert } = useSweetAlert();
+  const { activeCode } = useCodeStore();
   const onSkypackClick = () => {
     window.open('https://www.skypack.dev/', '_blank', 'noopener,noreferrer');
+  };
+
+  const onDownloadClick = async () => {
+    const fileName = await throwAlert(
+      'File name',
+      'Dont put any extension',
+      'info'
+    );
+    downloadjs(activeCode, `${fileName}.js`, 'text/javascript');
   };
 
   return (
@@ -12,7 +27,7 @@ export const SideBar = () => {
               <i className="fa-solid fa-upload"></i>
             </button>
           </li>
-          <li key={2}>
+          <li key={2} onClick={onDownloadClick}>
             <button title="Download">
               <i className="fa-solid fa-file-arrow-down"></i>
             </button>

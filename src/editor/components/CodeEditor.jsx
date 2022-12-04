@@ -4,11 +4,11 @@ import { CodePreviewer } from './CodePreviewer';
 import { useEffect, useRef } from 'react';
 import { useCodeStore } from '../hooks/useCodeStore';
 import { useRouteUrl } from '../hooks/useRouteUrl';
-// import { useSweetAlert } from '../hooks/useSweetAlert';
+import { useSweetAlert } from '../hooks/useSweetAlert';
 
 export const CodeEditor = () => {
   const dropArea = useRef(null);
-  // const { throwToast } = useSweetAlert();
+  const { throwToast } = useSweetAlert();
   const { onSetActiveCode, onSetUploadedCode } = useCodeStore();
 
   const { decodeText } = useRouteUrl();
@@ -37,10 +37,12 @@ export const CodeEditor = () => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
         if (file.type !== 'text/javascript') {
-          console.log('File type not supported');
+          throwToast('error', 'Invalid file type');
+          onSetUploadedCode('');
         } else {
           const text = await getTextFromFile(file);
           onSetUploadedCode(text);
+          throwToast('success', 'File uploaded successfully');
         }
       },
       false
