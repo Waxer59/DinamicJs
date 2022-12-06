@@ -22,8 +22,8 @@ yarn dev
 - [Monaco editor](https://microsoft.github.io/monaco-editor/)
 - [FontAwesome](https://fontawesome.com/)
 - [SweetAlert2](https://sweetalert2.github.io/)
-- [loop protect](https://www.npmjs.com/package/loop-protect)
-- SplitJs
-- React
-- Redux
-- SweetAlert2
+- [Loop protect](https://www.npmjs.com/package/loop-protect)
+- [SplitJs](https://www.npmjs.com/package/split.js?utm_source=cdnjs&utm_medium=cdnjs_link&utm_campaign=cdnjs_library)
+- [React](https://es.reactjs.org/)
+- [Redux](https://es.redux.js.org/)
+- [SweetAlert2](https://sweetalert2.github.io/)
