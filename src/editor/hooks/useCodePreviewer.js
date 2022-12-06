@@ -56,13 +56,42 @@ export const useCodePreviewer = () => {
           </div>
           <script type="module">
             const logger = document.querySelector('#logger');
+
             logger.innerHTML = '';
             let consoleLogs = [];
+
             console.stdlog = console.log.bind(console);
+            
+            // Overriding console.* functions
             console.log = function(){
             consoleLogs.push(Array.from(arguments));
             // console.stdlog.apply(console, arguments);
             }
+
+            console.error = function(){
+            consoleLogs.push(Array.from(arguments));
+            // console.stdlog.apply(console, arguments);
+            }
+
+            console.warn = function(){
+            consoleLogs.push(Array.from(arguments));
+            // console.stdlog.apply(console, arguments);
+            }
+
+            console.info = function(){
+            consoleLogs.push(Array.from(arguments));
+            // console.stdlog.apply(console, arguments);
+            }
+            console.clear = function(){
+            consoleLogs = [];
+            // console.stdlog.apply(console, arguments);
+            }
+
+            console.table = function(){
+            consoleLogs.push(Array.from(arguments));
+            // console.stdlog.apply(console, arguments);
+            }
+
             ${code}
             if(consoleLogs){
               consoleLogs.forEach((log)=>{
