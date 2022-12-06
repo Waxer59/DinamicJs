@@ -3,6 +3,7 @@ import downloadjs from 'downloadjs';
 import { useCodeStore } from '../hooks/useCodeStore';
 import { useSettingsStore } from '../hooks/useSettingsStore';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import confetti from 'canvas-confetti';
 
 export const SideBar = () => {
   const { throwAlert, throwConfig } = useSweetAlert();
@@ -22,6 +23,11 @@ export const SideBar = () => {
     );
     if (fileName) {
       downloadjs(activeCode, `${fileName}.js`, 'text/javascript');
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
     }
   };
 
