@@ -1,4 +1,4 @@
-# DinamicJs Version 2.2.1
+# DinamicJs Version 2.3.1
 
 It is an application that runs js in real time, its console is displayed on the right where you can see the logs,
 all the code is serialized in the url in base64 to be able to share or save it.
