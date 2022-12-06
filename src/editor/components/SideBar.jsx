@@ -2,10 +2,12 @@ import { useSweetAlert } from '../hooks/useSweetAlert';
 import downloadjs from 'downloadjs';
 import { useCodeStore } from '../hooks/useCodeStore';
 import { useSettingsStore } from '../hooks/useSettingsStore';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const SideBar = () => {
   const { throwAlert, throwConfig } = useSweetAlert();
   const { settings, onSetSettings } = useSettingsStore();
+  const { setLocalStorageItem } = useLocalStorage();
   const { activeCode } = useCodeStore();
 
   const onSkypackClick = () => {
@@ -24,7 +26,9 @@ export const SideBar = () => {
   };
 
   const onConfigClick = async () => {
-    onSetSettings(await throwConfig(settings));
+    const configValue = await throwConfig(settings);
+    onSetSettings(configValue);
+    setLocalStorageItem('settings', configValue);
   };
 
   // const onUploadClick = () => {

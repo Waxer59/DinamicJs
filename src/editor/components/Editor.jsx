@@ -3,11 +3,14 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { useRouteUrl } from '../hooks/useRouteUrl';
 import { useCodeStore } from '../hooks/useCodeStore';
 import { useSettingsStore } from '../hooks/useSettingsStore';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const Editor = () => {
   const [editor, setEditor] = useState(null);
   const { decodeText, saveCodeUrl } = useRouteUrl();
   const { onSetActiveCode, uploadedCode, activeCode } = useCodeStore();
+  const { onSetSettings } = useSettingsStore();
+  const { getLocalStorageItem } = useLocalStorage();
   const { settings } = useSettingsStore();
   const monacoEl = useRef(null);
 
@@ -48,6 +51,13 @@ export const Editor = () => {
       saveCodeUrl(activeCode);
     }
   }, [activeCode]);
+
+  useEffect(() => {
+    const settings = getLocalStorageItem('settings');
+    if (settings) {
+      onSetSettings(settings);
+    }
+  }, []);
 
   return <div className="code" ref={monacoEl}></div>;
 };
