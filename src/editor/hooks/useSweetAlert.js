@@ -100,6 +100,15 @@ export const useSweetAlert = () => {
           -webkit-backdrop-filter: blur( 20px );
           border-radius: 10px;
         }
+        .reset-btn{
+          background: #f44336;
+          color: #fff;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          cursor: pointer;
+          margin-top: 30px;
+        }
       </style>
         <div class="config">
           <div class="config__item">
@@ -114,16 +123,16 @@ export const useSweetAlert = () => {
           <div class="config__item">
             <label for="config__lineNumbers">Line numbers</label>
             <select id="config__lineNumbers">  
-              <option value="off">off</option>
+              <option value="off">Off</option>
               <option value="on" ${
                 lineNumbers === 'on' ? 'selected="selected"' : ''
-              }>on</option>
+              }>On</option>
               <option value="relative" ${
                 lineNumbers === 'relative' ? 'selected="selected"' : ''
-              }>relative</option>
+              }>Relative</option>
               <option value="interval" ${
                 lineNumbers === 'interval' ? 'selected="selected"' : ''
-              }>interval</option>
+              }>Interval</option>
             </select>
           </div>
           <div class="config__item">
@@ -149,9 +158,32 @@ export const useSweetAlert = () => {
             <input id="config__fontSize" type="number" min="1" max="100" value="${fontSize}">
           </div>
         </div>
+        <button class="reset-btn" id="reset-btn">Reset</button>
           `,
       showCloseButton: true,
       showCancelButton: true,
+      confirmButtonText: 'Save',
+      didOpen: () => {
+        const resetBtn = document.getElementById('reset-btn');
+        resetBtn.addEventListener('click', () => {
+          Swal.fire({
+            title: 'Are you sure?',
+            customClass,
+            heightAuto: false,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, reset it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.close();
+              localStorage.removeItem('settings');
+              location.reload();
+            }
+          });
+        });
+      },
       preConfirm: () => {
         const theme =
           document.getElementById('config__theme').value === 'dark'
