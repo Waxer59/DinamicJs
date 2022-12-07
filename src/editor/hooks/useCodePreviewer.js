@@ -91,8 +91,15 @@ export const useCodePreviewer = () => {
             consoleLogs.push(Array.from(arguments));
             // console.stdlog.apply(console, arguments);
             }
-
-            ${code}
+            ${code.replace(/^(?!.*import).*$/gm, '')}
+            try{
+              ${code.replace(
+                /import(?:(?:(?:[ \n\t]+([^ *\n\t\{\},]+)[ \n\t]*(?:,|[ \n\t]+))?([ \n\t]*\{(?:[ \n\t]*[^ \n\t"'\{\}]+[ \n\t]*,?)+\})?[ \n\t]*)|[ \n\t]*\*[ \n\t]*as[ \n\t]+([^ \n\t\{\}]+)[ \n\t]+)from[ \n\t]*(?:['"])([^'"\n]+)(['"])/gm,
+                ''
+              )}
+            }catch(e){
+              logger.innerHTML += '<li><p class="error">'+e+'</p></li>'
+            }
             if(consoleLogs){
               consoleLogs.forEach((log)=>{
                 if(String(log).trim() == ''){

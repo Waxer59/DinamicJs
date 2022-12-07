@@ -13,7 +13,8 @@
   "rules": {
     "semi": [2, "always"],
     "react/react-in-jsx-scope": 0,
-    "new-cap": 0
+    "new-cap": 0,
+    "no-useless-escape": 0
   },
   "settings": {
     "react": {
