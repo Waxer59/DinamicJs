@@ -24,7 +24,6 @@ export const useRouteUrl = () => {
     const encodedText = encodeText(text);
     navigate(`/${encodedText}`);
   };
-
   return {
     decodeText,
     saveCodeUrl,
