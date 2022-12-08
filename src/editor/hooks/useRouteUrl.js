@@ -28,6 +28,7 @@ export const useRouteUrl = () => {
   return {
     decodeText,
     saveCodeUrl,
-    decodeByCode
+    decodeByCode,
+    encodeText
   };
 };

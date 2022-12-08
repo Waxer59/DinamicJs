@@ -373,7 +373,6 @@ export const useSweetAlert = () => {
             throwToast('error', 'Canceled');
           });
         });
-
         saveBtn.addEventListener('click', async () => {
           const name = await throwAlert(
             'Name the code',
