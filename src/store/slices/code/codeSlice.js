@@ -3,19 +3,44 @@ import { createSlice } from '@reduxjs/toolkit';
 export const codeSlice = createSlice({
   name: 'code',
   initialState: {
-    codeTabs: [],
+    codeSaved: [], // when user saves a file localy, it will be stored here
     activeCode: null,
-    uploadedCode: null
+    uploadedCode: [] // when user uploads a file, it will be stored here and then reset
   },
   reducers: {
-    addCodeTabs: (state, action) => {
-      state.codeTabs.push(action.payload);
+    addCodeSaved: (state, { payload }) => {
+      if (!state.codeSaved.find((code) => code.name === payload.name)) {
+        state.codeSaved.push(payload);
+        return;
+      }
+      state.codeSaved = state.codeSaved.map((code) => {
+        if (code.name === payload.name) {
+          return payload;
+        }
+        return code;
+      });
     },
-    setActiveCode: (state, action) => {
-      state.activeCode = action.payload;
+    renameCodeSaved: (state, { payload }) => {
+      state.codeSaved = state.codeSaved.map((code) => {
+        if (code.name === payload.oldName) {
+          return { name: payload.newName, code: code.code };
+        }
+        return code;
+      });
     },
-    setUploadedCode: (state, action) => {
-      state.uploadedCode = action.payload;
+    setCodeSaved: (state, { payload }) => {
+      state.codeSaved = payload;
+    },
+    removeCodeSaved: (state, { payload }) => {
+      state.codeSaved = state.codeSaved.filter(
+        (code) => code.name !== payload.name
+      );
+    },
+    setActiveCode: (state, { payload }) => {
+      state.activeCode = payload;
+    },
+    setUploadedCode: (state, { payload }) => {
+      state.uploadedCode = payload;
     },
     resetUploadedCode: (state) => {
       state.uploadedCode = null;
@@ -24,8 +49,11 @@ export const codeSlice = createSlice({
 });
 
 export const {
-  addCodeTabs,
+  addCodeSaved,
   setActiveCode,
   setUploadedCode,
-  resetUploadedCode
+  resetUploadedCode,
+  removeCodeSaved,
+  renameCodeSaved,
+  setCodeSaved
 } = codeSlice.actions;

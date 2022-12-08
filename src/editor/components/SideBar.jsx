@@ -6,10 +6,11 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import confetti from 'canvas-confetti';
 
 export const SideBar = () => {
-  const { throwAlert, throwConfig } = useSweetAlert();
+  const { throwAlert, throwConfig, throwLocalSave, throwToast } =
+    useSweetAlert();
   const { settings, onSetSettings } = useSettingsStore();
   const { setLocalStorageItem } = useLocalStorage();
-  const { activeCode } = useCodeStore();
+  const { activeCode, codeSaved } = useCodeStore();
 
   const onSkypackClick = () => {
     window.open('https://www.skypack.dev/', '_blank', 'noopener,noreferrer');
@@ -23,6 +24,7 @@ export const SideBar = () => {
     );
     if (fileName) {
       downloadjs(activeCode, `${fileName}.js`, 'text/javascript');
+      throwToast('success', 'Downloaded');
       confetti({
         particleCount: 100,
         spread: 70,
@@ -37,19 +39,19 @@ export const SideBar = () => {
     setLocalStorageItem('settings', configValue);
   };
 
-  // const onUploadClick = () => {
-  //   throwUpload();
-  // };
+  const onLocalSaveClick = () => {
+    throwLocalSave(codeSaved);
+  };
 
   return (
     <aside className="menu" id="menu">
       <header>
         <ul style={{ marginTop: '35px' }}>
-          {/* <li key={1}>
-            <button title="Upload" onClick={onUploadClick}>
-              <i className="fa-solid fa-upload"></i>
+          <li key={1}>
+            <button title="LocalSave" onClick={onLocalSaveClick}>
+              <i className="fa-solid fa-bookmark"></i>
             </button>
-          </li> */}
+          </li>
           <li key={2} onClick={onDownloadClick}>
             <button title="Download">
               <i className="fa-solid fa-file-arrow-down"></i>
@@ -69,7 +71,7 @@ export const SideBar = () => {
       </header>
       <footer>
         <ul>
-          <li className="settings" key={5} title="settings">
+          <li className="settings" key={5} title="Settings">
             <button onClick={onConfigClick}>
               <i className="fa-solid fa-gear settings"></i>
             </button>

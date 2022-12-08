@@ -10,13 +10,24 @@ export const useRouteUrl = () => {
     return decodedText;
   };
 
-  const saveCodeUrl = (text) => {
+  const decodeByCode = (code) => {
+    const decodedText = isValid(code) ? decode(code) : '';
+    return decodedText;
+  };
+
+  const encodeText = (text) => {
     const encodedText = encode(text);
+    return encodedText;
+  };
+
+  const saveCodeUrl = (text) => {
+    const encodedText = encodeText(text);
     navigate(`/${encodedText}`);
   };
 
   return {
     decodeText,
-    saveCodeUrl
+    saveCodeUrl,
+    decodeByCode
   };
 };

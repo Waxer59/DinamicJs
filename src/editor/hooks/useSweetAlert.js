@@ -1,4 +1,6 @@
 import Swal from 'sweetalert2';
+import { useCodeStore } from './useCodeStore';
+import { useRouteUrl } from './useRouteUrl';
 
 const customClass = {
   popup: 'alerts',
@@ -10,14 +12,21 @@ const Toast = Swal.mixin({
   position: 'top-end',
   showConfirmButton: false,
   timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
-  }
+  timerProgressBar: false
 });
 
 export const useSweetAlert = () => {
+  const {
+    onAddCodeSaved,
+    onRemoveCodeSaved,
+    activeCode,
+    onCheckNameAndCode,
+    onRenameCodeSaved,
+    onGetCodeSavedByName,
+    onSetUploadedCode
+  } = useCodeStore();
+  const { encodeText } = useRouteUrl();
+
   const throwToast = (icon, title) => {
     Toast.fire({
       heightAuto: false,
@@ -217,9 +226,188 @@ export const useSweetAlert = () => {
     return { ...value };
   };
 
+  const throwLocalSave = async (saves = []) => {
+    let htmlSavesList = '';
+    saves.forEach((save, index) => {
+      htmlSavesList += `
+      <li>
+        <button class="save-item__name" title="save.name" id="code-btn" data-name="${save.name}">${save.name}</button>
+        <div class="save-item__actions">
+        <button class="save-item__btn overwrite-btn" id="save-item__btn-${index}" data-name="${save.name}" title="Overwrite" ><i class="fa-solid fa-floppy-disk"></i></button>
+          <button class="save-item__btn edit-btn" id="save-item__btn-${index}" data-name="${save.name}" title="Edit name" ><i class="fa-solid fa-pen-to-square"></i></button>
+          <button class="save-item__btn delete-btn" id="save-item__btn-${index}" data-name="${save.name}" title="Delete code" ><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </li>
+      `;
+    });
+    await Swal.fire({
+      title: 'Local saves',
+      customClass,
+      heightAuto: false,
+      html: `
+      <style>
+        .overwrite-btn{
+          background: #FFBC49 !important;
+          color: #fff;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        .save-item__name{
+          width: 60%;
+          color: #fff;
+          background: #252627 !important;
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        .save-btn{
+          background: #4caf50;
+          color: #fff;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+
+        .items-saved{
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-top: 15px;
+        }
+
+        .items-saved li{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .items-saved li button{
+          background: #4caf50;
+          color: #fff;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+
+        .edit-btn{
+          background: #2196f3 !important;
+        }
+
+        .delete-btn{
+          background: #f44336 !important;
+        }
+      </style>
+        <div class="config">
+          <div class="config__item">
+          <button class="save-btn" id="save-btn">Save this file</button>
+          </div>
+          <div class="config__item">
+          <ul class="items-saved">
+            ${htmlSavesList}
+          </ul>
+          </div>
+        </div>
+          `,
+      showCloseButton: true,
+      showCancelButton: false,
+      showConfirmButton: false,
+      didOpen: async () => {
+        const saveBtn = document.getElementById('save-btn');
+        const editBtns = document.querySelectorAll('.edit-btn');
+        const deleteBtns = document.querySelectorAll('.delete-btn');
+        const overwriteBtns = document.querySelectorAll('.overwrite-btn');
+        const codeBtns = document.querySelectorAll('#code-btn');
+
+        overwriteBtns.forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const name = await throwAlert(
+              'Overwriting',
+              `Your overwriting " ${btn.getAttribute('data-name')} "`
+            );
+            if (name) {
+              onAddCodeSaved(name);
+              throwToast('success', 'Saved');
+              return;
+            }
+            throwToast('error', 'Canceled');
+          });
+        });
+
+        editBtns.forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const name = await throwAlert(
+              'Editing',
+              `Your editing "${btn.getAttribute('data-name')}"`
+            );
+            if (name) {
+              onRenameCodeSaved(btn.getAttribute('data-name'), name);
+              throwToast('success', 'Saved');
+              return;
+            }
+            throwToast('error', 'Canceled');
+          });
+        });
+
+        deleteBtns.forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const name = await throwAlert(
+              'Deleting',
+              `Your deleting "${btn.getAttribute(
+                'data-name'
+              )}" type the name to confirm`
+            );
+            if (name === btn.getAttribute('data-name')) {
+              onRemoveCodeSaved(name);
+              throwToast('success', 'Deleted');
+              return;
+            }
+            throwToast('error', 'Canceled');
+          });
+        });
+
+        saveBtn.addEventListener('click', async () => {
+          const name = await throwAlert(
+            'Name the code',
+            'This code will be saved locally'
+          );
+          if (onCheckNameAndCode(name)) {
+            throwToast('error', 'This name already exists');
+            return;
+          }
+          if (name && name.trim() !== '') {
+            onAddCodeSaved(name, encodeText(activeCode));
+            throwToast('success', 'Saved');
+          }
+        });
+
+        codeBtns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const code = onGetCodeSavedByName(btn.getAttribute('data-name'));
+            if (code) {
+              onSetUploadedCode(code);
+              throwToast('success', 'Loaded');
+              return;
+            }
+            throwToast('error', 'Canceled');
+          });
+        });
+      }
+    });
+  };
+
   return {
     throwToast,
     throwAlert,
-    throwConfig
+    throwConfig,
+    throwLocalSave
   };
 };
