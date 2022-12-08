@@ -64,31 +64,32 @@ export const useCodePreviewer = () => {
             
             // Overriding console.* functions
             console.log = function(){
-            consoleLogs.push(Array.from(arguments));
+            consoleLogs.push(arguments[0]);
             // console.stdlog.apply(console, arguments);
             }
 
             console.error = function(){
-            consoleLogs.push(Array.from(arguments));
+            consoleLogs.push(arguments[0]);
             // console.stdlog.apply(console, arguments);
             }
 
             console.warn = function(){
-            consoleLogs.push(Array.from(arguments));
+            consoleLogs.push(arguments[0]);
             // console.stdlog.apply(console, arguments);
             }
 
             console.info = function(){
-            consoleLogs.push(Array.from(arguments));
+            consoleLogs.push(arguments[0]);
             // console.stdlog.apply(console, arguments);
             }
+
             console.clear = function(){
             consoleLogs = [];
             // console.stdlog.apply(console, arguments);
             }
 
             console.table = function(){
-            consoleLogs.push(Array.from(arguments));
+            consoleLogs.push(arguments[0]);
             // console.stdlog.apply(console, arguments);
             }
             ${code.replace(/^(?!.*import).*$/gm, '')}
@@ -103,7 +104,22 @@ export const useCodePreviewer = () => {
             if(consoleLogs){
               consoleLogs.forEach((log)=>{
                 if(String(log).trim() == ''){
-                    return;
+                  logger.innerHTML += '<li><p class="log"> Log: ' + "' '" +'</p></li>'
+                  return;
+                }
+                if(typeof log == 'object'){
+                  logger.innerHTML += '<li><p class="log"> Log: '+JSON.stringify(log)+'</p></li>'
+                  return;
+                }
+                if(typeof log == 'function'){
+                  logger.innerHTML += '<li><p class="log"> Log: '+log.toString()+'</p></li>'
+                  return;
+                }
+                if(typeof log == 'object object'){
+                  logger.innerHTML += '<li><p class="log"> Log: '+JSON.stringify(log)+'</p></li>'
+                }
+                if(typeof log == 'undefined'){
+                  return;
                 }
                 logger.innerHTML += '<li><p class="log"> Log: '+log+'</p></li>'
               })
