@@ -396,6 +396,10 @@ export const useSweetAlert = () => {
               throwToast('success', 'Loaded');
               return;
             }
+            if (code === '') {
+              throwToast('info', 'Empty code');
+              return;
+            }
             throwToast('error', 'Canceled');
           });
         });
