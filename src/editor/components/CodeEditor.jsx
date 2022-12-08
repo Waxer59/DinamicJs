@@ -5,17 +5,24 @@ import { useEffect, useRef } from 'react';
 import { useCodeStore } from '../hooks/useCodeStore';
 import { useRouteUrl } from '../hooks/useRouteUrl';
 import { useSweetAlert } from '../hooks/useSweetAlert';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const CodeEditor = () => {
   const dropArea = useRef(null);
   const { throwToast } = useSweetAlert();
-  const { onSetActiveCode, onSetUploadedCode } = useCodeStore();
-
+  const { onSetActiveCode, onSetUploadedCode, onSetCodeSaved, codeSaved } =
+    useCodeStore();
+  const { getLocalStorageItem, setLocalStorageItem } = useLocalStorage();
   const { decodeText } = useRouteUrl();
 
   useEffect(() => {
     onSetActiveCode(decodeText());
+    onSetCodeSaved(getLocalStorageItem('codeSaved') ?? []);
   }, []);
+
+  useEffect(() => {
+    setLocalStorageItem('codeSaved', codeSaved);
+  }, [codeSaved]);
 
   useEffect(() => {
     const getTextFromFile = (file) => {
