@@ -254,6 +254,12 @@ export const useSweetAlert = () => {
           border-radius: 5px;
           cursor: pointer;
         }
+        .save-item__actions{
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 5px;
+        }
         .save-item__name{
           width: 60%;
           color: #fff;

@@ -82,15 +82,17 @@ export const useCodePreviewer = () => {
             consoleLogs.push(Array.from(arguments));
             // console.stdlog.apply(console, arguments);
             }
-            console.clear = function(){
-            consoleLogs = [];
-            // console.stdlog.apply(console, arguments);
-            }
 
             console.table = function(){
             consoleLogs.push(Array.from(arguments));
             // console.stdlog.apply(console, arguments);
             }
+
+            console.clear = function(){
+            consoleLogs = [];
+            // console.stdlog.apply(console, arguments);
+            }
+
             ${code.replace(/^(?!.*import).*$/gm, '')}
             try{
               ${code.replace(
@@ -102,10 +104,30 @@ export const useCodePreviewer = () => {
             }
             if(consoleLogs){
               consoleLogs.forEach((log)=>{
-                if(String(log).trim() == ''){
+                let logs = [];
+                log.forEach((log)=>{
+                  if(String(log).trim() == '' && typeof log == 'string'){
+                    logs.push("' '");
                     return;
-                }
-                logger.innerHTML += '<li><p class="log"> Log: '+log+'</p></li>'
+                  }
+                  if(typeof log == 'object'){
+                    logs.push(JSON.stringify(log));
+                    return;
+                  }
+                  if(typeof log == 'function'){
+                    losgs.push(log.toString());
+                    return;
+                  }
+                  if(typeof log == 'object object'){
+                    logs.push(JSON.stringify(log));
+                    return;
+                  }
+                  if(typeof log == 'undefined'){
+                    return;
+                  }
+                  logs.push(log);
+                })
+                logger.innerHTML += '<li><p> Log: '+logs.join(' , ')+'</p></li>'
               })
             }
           </script>
