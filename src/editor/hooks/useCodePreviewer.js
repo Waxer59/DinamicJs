@@ -67,7 +67,7 @@ export const useCodePreviewer = () => {
             consoleLogs.push(Array.from(arguments));
             // console.stdlog.apply(console, arguments);
             }
-            
+
             console.error = function(){
             consoleLogs.push(Array.from(arguments));
             // console.stdlog.apply(console, arguments);
@@ -104,27 +104,30 @@ export const useCodePreviewer = () => {
             }
             if(consoleLogs){
               consoleLogs.forEach((log)=>{
+                let logs = [];
                 log.forEach((log)=>{
-                  if(String(log).trim() == ''){
-                    logger.innerHTML += '<li><p class="log"> Log: ' + "' '" +'</p></li>'
+                  if(String(log).trim() == '' && typeof log == 'string'){
+                    logs.push("' '");
                     return;
                   }
                   if(typeof log == 'object'){
-                    logger.innerHTML += '<li><p class="log"> Log: '+JSON.stringify(log)+'</p></li>'
+                    logs.push(JSON.stringify(log));
                     return;
                   }
                   if(typeof log == 'function'){
-                    logger.innerHTML += '<li><p class="log"> Log: '+log.toString()+'</p></li>'
+                    losgs.push(log.toString());
                     return;
                   }
                   if(typeof log == 'object object'){
-                    logger.innerHTML += '<li><p class="log"> Log: '+JSON.stringify(log)+'</p></li>'
+                    logs.push(JSON.stringify(log));
+                    return;
                   }
                   if(typeof log == 'undefined'){
                     return;
                   }
-                  logger.innerHTML += '<li><p class="log"> Log: '+log+'</p></li>'
+                  logs.push(log);
                 })
+                logger.innerHTML += '<li><p> Log: '+logs.join(' , ')+'</p></li>'
               })
             }
           </script>
