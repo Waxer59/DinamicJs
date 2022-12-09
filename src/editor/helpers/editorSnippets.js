@@ -7,7 +7,7 @@ monaco.languages.registerCompletionItemProvider('javascript', {
       {
         label: 'clg',
         kind: monaco.languages.CompletionItemKind.Snippet,
-        insertText: 'console.log()',
+        insertText: 'console.log(${1:})',
         insertTextRules:
           monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
         documentation: 'Log output to console'
