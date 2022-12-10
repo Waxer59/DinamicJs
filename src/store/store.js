@@ -6,5 +6,6 @@ export const store = configureStore({
   reducer: {
     code: codeSlice.reducer,
     settings: settingsSlice.reducer
-  }
+  },
+  devTools: false
 });
