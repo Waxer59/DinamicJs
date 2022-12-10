@@ -123,6 +123,7 @@ export const useCodePreviewer = () => {
                     return;
                   }
                   if(typeof log == 'undefined'){
+                    logs.push("undefined");
                     return;
                   }
                   logs.push(log);
