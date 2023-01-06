@@ -75,29 +75,35 @@ export const useCodePreviewer = () => {
             
             // Overriding console.* functions
             console.log = function(){
-            let logs = [];
-            Array.from(arguments).forEach((log)=>{
-              if(!log){
-                log = "<pre>" + log + "</pre>";
-              }else{
-                let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
-                self = this;
-                log = '<pre class="json-pre"><code>' +
-                JSON.stringify(log, null, 3)
-                .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-                .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-                '</code></pre>';
-              }
-              logs.push(log);
-            })
-            document.querySelector('#logger').innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
-            // console.stdlog.apply(console, arguments);
+              let logs = [];
+              Array.from(arguments).forEach((log)=>{
+                if(log === ""){
+                  log = '<pre>""</pre>'
+                }
+                else if(!log){
+                  log = "<pre>" + log + "</pre>";
+                }else{
+                  let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
+                  self = this;
+                  log = '<pre class="json-pre"><code>' +
+                  JSON.stringify(log, null, 3)
+                  .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
+                  .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+                  '</code></pre>';
+                }
+                logs.push(log);
+              })
+              document.querySelector('#logger').innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
+              // console.stdlog.apply(console, arguments);
             }
 
             console.error = function(){
               let logs = [];
               Array.from(arguments).forEach((log)=>{
-                if(!log){
+                if(log === ""){
+                  log = '<pre>""</pre>'
+                }
+                else if(!log){
                   log = "<pre>" + log + "</pre>";
                 }else{
                   let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
@@ -117,7 +123,10 @@ export const useCodePreviewer = () => {
             console.warn = function(){
               let logs = [];
               Array.from(arguments).forEach((log)=>{
-                if(!log){
+                if(log === ""){
+                  log = '<pre>""</pre>'
+                }
+                else if(!log){
                   log = "<pre>" + log + "</pre>";
                 }else{
                   let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
@@ -137,7 +146,10 @@ export const useCodePreviewer = () => {
             console.info = function(){
               let logs = [];
               Array.from(arguments).forEach((log)=>{
-                if(!log){
+                if(log === ""){
+                  log = '<pre>""</pre>'
+                }
+                else if(!log){
                   log = "<pre>" + log + "</pre>";
                 }else{
                   let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
@@ -157,7 +169,33 @@ export const useCodePreviewer = () => {
             console.table = function(){
               let logs = [];
               Array.from(arguments).forEach((log)=>{
-                if(!log){
+                if(log === ""){
+                  log = '<pre>""</pre>'
+                }
+                else if(!log){
+                  log = "<pre>" + log + "</pre>";
+                }else{
+                  let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
+                  self = this;
+                  log = '<pre class="json-pre"><code>' +
+                  JSON.stringify(log, null, 3)
+                  .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
+                  .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+                  '</code></pre>';
+                }
+                logs.push(log);
+              })
+              document.querySelector('#logger').innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
+              // console.stdlog.apply(console, arguments);
+            }
+
+            console.debug = function(){
+              let logs = [];
+              Array.from(arguments).forEach((log)=>{
+                if(log === ""){
+                  log = '<pre>""</pre>'
+                }
+                else if(!log){
                   log = "<pre>" + log + "</pre>";
                 }else{
                   let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
