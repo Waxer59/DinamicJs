@@ -52,7 +52,7 @@ export const useCodePreviewer = () => {
               margin: 16px 0;
             }
             .log-el{
-              margin-bottom:25px;
+              margin-bottom:10px;
             }
             pre{
               margin:0;
@@ -72,18 +72,6 @@ export const useCodePreviewer = () => {
             };
           </script>
           <script type="module" defer>
-            function prettyPrint(obj) {
-              if(!obj){
-                return "<pre>" + obj + "</pre>";
-              }
-                let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
-                    self = this;
-                return '<pre class="json-pre"><code>' +
-                    JSON.stringify(obj, null, 3)
-                        .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-                        .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-                    '</code></pre>';
-            }
             const logger = document.querySelector('#logger');
 
             logger.innerHTML = '';
@@ -134,7 +122,18 @@ export const useCodePreviewer = () => {
               consoleLogs.forEach((logArr)=>{
                 let logs = [];
                 logArr.forEach((log)=>{
-                  logs.push(prettyPrint(log));
+                    if(!log){
+                      log = "<pre>" + log + "</pre>";
+                    }else{
+                      let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
+                      self = this;
+                  log = '<pre class="json-pre"><code>' +
+                      JSON.stringify(log, null, 3)
+                          .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
+                          .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+                      '</code></pre>';
+                    }
+                  logs.push(log);
                 })
               logger.innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
               })
