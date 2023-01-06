@@ -11,7 +11,7 @@ export const EditorPage = () => {
   const { decodeByCode, getBase64Param } = useRouteUrl();
   useEffect(() => {
     window.onpopstate = (event) => {
-      onSetUploadedCode(decodeByCode(getBase64Param));
+      onSetUploadedCode(decodeByCode(getBase64Param()));
     };
   }, []);
 
