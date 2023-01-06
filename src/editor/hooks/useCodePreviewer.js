@@ -73,6 +73,9 @@ export const useCodePreviewer = () => {
           </script>
           <script type="module" defer>
             function prettyPrint(obj) {
+              if(!obj){
+                return "<pre>" + obj + "</pre>";
+              }
                 let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
                     self = this;
                 return '<pre class="json-pre"><code>' +
@@ -133,7 +136,7 @@ export const useCodePreviewer = () => {
                 logArr.forEach((log)=>{
                   logs.push(prettyPrint(log));
                 })
-                logger.innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
+              logger.innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
               })
             }
           </script>
