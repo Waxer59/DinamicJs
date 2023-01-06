@@ -1,12 +1,16 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { encode, decode, isValid } from 'js-base64';
 
 export const useRouteUrl = () => {
-  const { code } = useParams();
+  const base64Param = document.location.pathname.replace('/', '');
   const navigate = useNavigate();
 
+  const getBase64Param = () => {
+    return base64Param;
+  };
+
   const decodeText = () => {
-    const decodedText = isValid(code) ? decode(code) : '';
+    const decodedText = isValid(base64Param) ? decode(base64Param) : '';
     return decodedText;
   };
 
@@ -28,6 +32,7 @@ export const useRouteUrl = () => {
     decodeText,
     saveCodeUrl,
     decodeByCode,
-    encodeText
+    encodeText,
+    getBase64Param
   };
 };

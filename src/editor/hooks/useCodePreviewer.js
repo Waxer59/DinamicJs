@@ -47,14 +47,40 @@ export const useCodePreviewer = () => {
             .error{
             color: #ff3333;
             }
+            .logger{
+              padding-left:40px;
+              margin: 16px 0;
+            }
+            .log-el{
+              margin-bottom:25px;
+            }
+            pre{
+              margin:0;
+              display:inline;
+            }
           </style>
       </head>
       <body>
           <div id="logger-container">
-            <ul id="logger">
-            </ul>
+            <div id="logger" class="logger">
+            </div>
           </div>
-          <script type="module">
+          <script defer>
+          const logger = document.querySelector('#logger');
+            window.onerror = function (e) {
+              logger.innerHTML = '<div class="log-el"><p class="error">'+e+'</p></div>'
+            };
+          </script>
+          <script type="module" defer>
+            function prettyPrint(obj) {
+                let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
+                    self = this;
+                return '<pre class="json-pre"><code>' +
+                    JSON.stringify(obj, null, 3)
+                        .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
+                        .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+                    '</code></pre>';
+            }
             const logger = document.querySelector('#logger');
 
             logger.innerHTML = '';
@@ -91,8 +117,7 @@ export const useCodePreviewer = () => {
             console.clear = function(){
             consoleLogs = [];
             // console.stdlog.apply(console, arguments);
-            }
-
+            };
             ${code.replace(/^(?!.*import).*$/gm, '')}
             try{
               ${code.replace(
@@ -100,35 +125,15 @@ export const useCodePreviewer = () => {
                 ''
               )}
             }catch(e){
-              logger.innerHTML += '<li><p class="error">'+e+'</p></li>'
+              logger.innerHTML += '<div class="log-el"><p class="error">'+e+'</p></div>'
             }
             if(consoleLogs){
-              consoleLogs.forEach((log)=>{
+              consoleLogs.forEach((logArr)=>{
                 let logs = [];
-                log.forEach((log)=>{
-                  if(String(log).trim() == '' && typeof log == 'string'){
-                    logs.push("' '");
-                    return;
-                  }
-                  if(typeof log == 'object'){
-                    logs.push(JSON.stringify(log));
-                    return;
-                  }
-                  if(typeof log == 'function'){
-                    losgs.push(log.toString());
-                    return;
-                  }
-                  if(typeof log == 'object object'){
-                    logs.push(JSON.stringify(log));
-                    return;
-                  }
-                  if(typeof log == 'undefined'){
-                    logs.push("undefined");
-                    return;
-                  }
-                  logs.push(log);
+                logArr.forEach((log)=>{
+                  logs.push(prettyPrint(log));
                 })
-                logger.innerHTML += '<li><p> Log: '+logs.join(' , ')+'</p></li>'
+                logger.innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
               })
             }
           </script>

@@ -8,10 +8,10 @@ import { useEffect } from 'react';
 
 export const EditorPage = () => {
   const { onSetUploadedCode } = useCodeStore();
-  const { decodeByCode } = useRouteUrl();
+  const { decodeByCode, getBase64Param } = useRouteUrl();
   useEffect(() => {
     window.onpopstate = (event) => {
-      onSetUploadedCode(decodeByCode(document.location.href.split('/').pop()));
+      onSetUploadedCode(decodeByCode(getBase64Param));
     };
   }, []);
 

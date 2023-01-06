@@ -1,4 +1,4 @@
-# DinamicJs Version 2.6.6
+# DinamicJs Version 2.7.6
 
 It is an application that runs js in real time, its console is displayed on the right where you can see the logs,
 all the code is serialized in the url in base64 to be able to share or save it.
@@ -49,3 +49,4 @@ yarn dev
 - [React](https://es.reactjs.org/)
 - [Redux](https://es.redux.js.org/)
 - [SweetAlert2](https://sweetalert2.github.io/)
+- [Stylized json](https://www.npmjs.com/package/stylized-json)
