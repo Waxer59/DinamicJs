@@ -1,7 +1,9 @@
 import * as Babel from '@babel/standalone/babel';
 import protect from 'loop-protect';
 
-Babel.registerPlugin('loopProtection', protect(100));
+const TIMEOUT = 100;
+
+Babel.registerPlugin('loopProtection', protect(TIMEOUT));
 export const useProtectCode = () => {
   const transform = (source) =>
     Babel.transform(source, {
@@ -9,11 +11,10 @@ export const useProtectCode = () => {
     }).code;
 
   const protectCode = (code) => {
-    let codeToProtect = code;
     try {
-      codeToProtect = transform(code);
+      code = transform(code);
     } catch (error) {}
-    return codeToProtect;
+    return code;
   };
 
   return {

@@ -1,5 +1,29 @@
 import { useProtectCode } from './useProtectCode';
 
+const OVERRIDE_CONSOLE = `
+Array.from(arguments).forEach((log)=>{
+  if(typeof log === "symbol" || typeof log === "bigint"){
+    log = '<pre>'+log.toString()+'</pre>'
+  }else if(typeof log === "function"){
+    log = '<pre>'+log+'</pre>'
+  }else if(log === ""){
+    log = '<pre>""</pre>'
+  }
+  else if(!log){
+    log = "<pre>" + log + "</pre>";
+  }else{
+    let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
+    self = this;
+    log = '<pre class="json-pre"><code>' +
+    JSON.stringify(log, null, 3)
+    .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+    '</code></pre>';
+  }
+  document.querySelector('#logger').innerHTML += '<div class="log-el">'+log.replace(/[,]/g,",&nbsp&nbsp")+'</div>'
+})
+// console.stdlog.apply(console, arguments);`;
+
 export const useCodePreviewer = () => {
   const { protectCode } = useProtectCode();
 
@@ -47,52 +71,56 @@ export const useCodePreviewer = () => {
             .error{
             color: #ff3333;
             }
+            .logger{
+              padding-left:40px;
+              margin: 16px 0;
+            }
+            .log-el{
+              margin-bottom:10px;
+            }
+            pre{
+              margin:0;
+              display:inline;
+            }
           </style>
       </head>
       <body>
           <div id="logger-container">
-            <ul id="logger">
-            </ul>
+            <div id="logger" class="logger">
+            </div>
           </div>
-          <script type="module">
-            const logger = document.querySelector('#logger');
-
-            logger.innerHTML = '';
-            let consoleLogs = [];
-
+          <script defer>
+            window.onerror = function (e) {
+              document.querySelector('#logger').innerHTML = '<div class="log-el"><p class="error">'+e+'</p></div>'
+            };
+          </script>
+          <script type="module" defer>
             console.stdlog = console.log.bind(console);
             
             // Overriding console.* functions
             console.log = function(){
-            consoleLogs.push(Array.from(arguments));
-            // console.stdlog.apply(console, arguments);
+              ${OVERRIDE_CONSOLE}
             }
 
             console.error = function(){
-            consoleLogs.push(Array.from(arguments));
-            // console.stdlog.apply(console, arguments);
+              ${OVERRIDE_CONSOLE}
             }
 
             console.warn = function(){
-            consoleLogs.push(Array.from(arguments));
-            // console.stdlog.apply(console, arguments);
+              ${OVERRIDE_CONSOLE}
             }
 
             console.info = function(){
-            consoleLogs.push(Array.from(arguments));
-            // console.stdlog.apply(console, arguments);
+              ${OVERRIDE_CONSOLE}
             }
 
             console.table = function(){
-            consoleLogs.push(Array.from(arguments));
-            // console.stdlog.apply(console, arguments);
+              ${OVERRIDE_CONSOLE}
             }
 
-            console.clear = function(){
-            consoleLogs = [];
-            // console.stdlog.apply(console, arguments);
+            console.debug = function(){
+              ${OVERRIDE_CONSOLE}
             }
-
             ${code.replace(/^(?!.*import).*$/gm, '')}
             try{
               ${code.replace(
@@ -100,43 +128,13 @@ export const useCodePreviewer = () => {
                 ''
               )}
             }catch(e){
-              logger.innerHTML += '<li><p class="error">'+e+'</p></li>'
-            }
-            if(consoleLogs){
-              consoleLogs.forEach((log)=>{
-                let logs = [];
-                log.forEach((log)=>{
-                  if(String(log).trim() == '' && typeof log == 'string'){
-                    logs.push("' '");
-                    return;
-                  }
-                  if(typeof log == 'object'){
-                    logs.push(JSON.stringify(log));
-                    return;
-                  }
-                  if(typeof log == 'function'){
-                    losgs.push(log.toString());
-                    return;
-                  }
-                  if(typeof log == 'object object'){
-                    logs.push(JSON.stringify(log));
-                    return;
-                  }
-                  if(typeof log == 'undefined'){
-                    logs.push("undefined");
-                    return;
-                  }
-                  logs.push(log);
-                })
-                logger.innerHTML += '<li><p> Log: '+logs.join(' , ')+'</p></li>'
-              })
+              document.querySelector('#logger').innerHTML += '<div class="log-el"><p class="error">'+e+'</p></div>'
             }
           </script>
       </body>
     </html>
    `;
   };
-
   return {
     update
   };
