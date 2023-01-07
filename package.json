@@ -1,7 +1,7 @@
 {
   "name": "dinamicjs",
   "private": true,
-  "version": "2.3.3",
+  "version": "2.7.6",
   "type": "module",
   "license": "MIT",
   "scripts": {
