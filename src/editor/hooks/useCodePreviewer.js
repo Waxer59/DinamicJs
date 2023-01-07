@@ -1,5 +1,29 @@
 import { useProtectCode } from './useProtectCode';
 
+const OVERRIDE_CONSOLE = `
+Array.from(arguments).forEach((log)=>{
+  if(typeof log === "symbol" || typeof log === "bigint"){
+    log = '<pre>'+log.toString()+'</pre>'
+  }else if(typeof log === "function"){
+    log = '<pre>'+log+'</pre>'
+  }else if(log === ""){
+    log = '<pre>""</pre>'
+  }
+  else if(!log){
+    log = "<pre>" + log + "</pre>";
+  }else{
+    let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
+    self = this;
+    log = '<pre class="json-pre"><code>' +
+    JSON.stringify(log, null, 3)
+    .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+    '</code></pre>';
+  }
+  document.querySelector('#logger').innerHTML += '<div class="log-el">'+log.replace(/[,]/g,",&nbsp&nbsp")+'</div>'
+})
+// console.stdlog.apply(console, arguments);`;
+
 export const useCodePreviewer = () => {
   const { protectCode } = useProtectCode();
 
@@ -75,153 +99,27 @@ export const useCodePreviewer = () => {
             
             // Overriding console.* functions
             console.log = function(){
-              let logs = [];
-              Array.from(arguments).forEach((log)=>{
-                if(typeof log === "function"){
-                  log = '<pre>'+log+'</pre>'
-                }else if(log === ""){
-                  log = '<pre>""</pre>'
-                }
-                else if(!log){
-                  log = "<pre>" + log + "</pre>";
-                }else{
-                  let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
-                  self = this;
-                  log = '<pre class="json-pre"><code>' +
-                  JSON.stringify(log, null, 3)
-                  .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-                  .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-                  '</code></pre>';
-                }
-                logs.push(log);
-              })
-              document.querySelector('#logger').innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
-              // console.stdlog.apply(console, arguments);
+              ${OVERRIDE_CONSOLE}
             }
 
             console.error = function(){
-              let logs = [];
-              Array.from(arguments).forEach((log)=>{
-                if(typeof log === "function"){
-                  log = '<pre>'+log+'</pre>'
-                }else if(log === ""){
-                  log = '<pre>""</pre>'
-                }
-                else if(!log){
-                  log = "<pre>" + log + "</pre>";
-                }else{
-                  let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
-                  self = this;
-                  log = '<pre class="json-pre"><code>' +
-                  JSON.stringify(log, null, 3)
-                  .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-                  .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-                  '</code></pre>';
-                }
-                logs.push(log);
-              })
-              document.querySelector('#logger').innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
-              // console.stdlog.apply(console, arguments);
+              ${OVERRIDE_CONSOLE}
             }
 
             console.warn = function(){
-              let logs = [];
-              Array.from(arguments).forEach((log)=>{
-                if(typeof log === "function"){
-                  log = '<pre>'+log+'</pre>'
-                }else if(log === ""){
-                  log = '<pre>""</pre>'
-                }
-                else if(!log){
-                  log = "<pre>" + log + "</pre>";
-                }else{
-                  let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
-                  self = this;
-                  log = '<pre class="json-pre"><code>' +
-                  JSON.stringify(log, null, 3)
-                  .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-                  .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-                  '</code></pre>';
-                }
-                logs.push(log);
-              })
-              document.querySelector('#logger').innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
-              // console.stdlog.apply(console, arguments);
+              ${OVERRIDE_CONSOLE}
             }
 
             console.info = function(){
-              let logs = [];
-              Array.from(arguments).forEach((log)=>{
-                if(typeof log === "function"){
-                  log = '<pre>'+log+'</pre>'
-                }else if(log === ""){
-                  log = '<pre>""</pre>'
-                }
-                else if(!log){
-                  log = "<pre>" + log + "</pre>";
-                }else{
-                  let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
-                  self = this;
-                  log = '<pre class="json-pre"><code>' +
-                  JSON.stringify(log, null, 3)
-                  .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-                  .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-                  '</code></pre>';
-                }
-                logs.push(log);
-              })
-              document.querySelector('#logger').innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
-              // console.stdlog.apply(console, arguments);
+              ${OVERRIDE_CONSOLE}
             }
 
             console.table = function(){
-              let logs = [];
-              Array.from(arguments).forEach((log)=>{
-                if(typeof log === "function"){
-                  log = '<pre>'+log+'</pre>'
-                }else if(log === ""){
-                  log = '<pre>""</pre>'
-                }
-                else if(!log){
-                  log = "<pre>" + log + "</pre>";
-                }else{
-                  let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
-                  self = this;
-                  log = '<pre class="json-pre"><code>' +
-                  JSON.stringify(log, null, 3)
-                  .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-                  .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-                  '</code></pre>';
-                }
-                logs.push(log);
-              })
-              document.querySelector('#logger').innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
-              // console.stdlog.apply(console, arguments);
+              ${OVERRIDE_CONSOLE}
             }
 
             console.debug = function(){
-              let logs = [];
-              Array.from(arguments).forEach((log)=>{
-                if(typeof log === "function"){
-                  log = '<pre>'+log+'</pre>'
-                }else if(log === ""){
-                  log = '<pre>""</pre>'
-                }
-                else if(!log){
-                  log = "<pre>" + log + "</pre>";
-                }else{
-                  let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg,
-                  self = this;
-                  log = '<pre class="json-pre"><code>' +
-                  JSON.stringify(log, null, 3)
-                  .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-                  .replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-                  '</code></pre>';
-                }
-                logs.push(log);
-              })
-              document.querySelector('#logger').innerHTML += '<div class="log-el">'+logs.toString().replace(/[,]/g,",&nbsp&nbsp")+'</div>'
-              // console.stdlog.apply(console, arguments);
+              ${OVERRIDE_CONSOLE}
             }
             ${code.replace(/^(?!.*import).*$/gm, '')}
             try{
