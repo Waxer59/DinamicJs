@@ -77,7 +77,9 @@ export const useCodePreviewer = () => {
             console.log = function(){
               let logs = [];
               Array.from(arguments).forEach((log)=>{
-                if(log === ""){
+                if(typeof log === "function"){
+                  log = '<pre>'+log+'</pre>'
+                }else if(log === ""){
                   log = '<pre>""</pre>'
                 }
                 else if(!log){
@@ -100,7 +102,9 @@ export const useCodePreviewer = () => {
             console.error = function(){
               let logs = [];
               Array.from(arguments).forEach((log)=>{
-                if(log === ""){
+                if(typeof log === "function"){
+                  log = '<pre>'+log+'</pre>'
+                }else if(log === ""){
                   log = '<pre>""</pre>'
                 }
                 else if(!log){
@@ -123,7 +127,9 @@ export const useCodePreviewer = () => {
             console.warn = function(){
               let logs = [];
               Array.from(arguments).forEach((log)=>{
-                if(log === ""){
+                if(typeof log === "function"){
+                  log = '<pre>'+log+'</pre>'
+                }else if(log === ""){
                   log = '<pre>""</pre>'
                 }
                 else if(!log){
@@ -146,7 +152,9 @@ export const useCodePreviewer = () => {
             console.info = function(){
               let logs = [];
               Array.from(arguments).forEach((log)=>{
-                if(log === ""){
+                if(typeof log === "function"){
+                  log = '<pre>'+log+'</pre>'
+                }else if(log === ""){
                   log = '<pre>""</pre>'
                 }
                 else if(!log){
@@ -169,7 +177,9 @@ export const useCodePreviewer = () => {
             console.table = function(){
               let logs = [];
               Array.from(arguments).forEach((log)=>{
-                if(log === ""){
+                if(typeof log === "function"){
+                  log = '<pre>'+log+'</pre>'
+                }else if(log === ""){
                   log = '<pre>""</pre>'
                 }
                 else if(!log){
@@ -192,7 +202,9 @@ export const useCodePreviewer = () => {
             console.debug = function(){
               let logs = [];
               Array.from(arguments).forEach((log)=>{
-                if(log === ""){
+                if(typeof log === "function"){
+                  log = '<pre>'+log+'</pre>'
+                }else if(log === ""){
                   log = '<pre>""</pre>'
                 }
                 else if(!log){
