@@ -17,6 +17,12 @@ yarn
 yarn dev
 ```
 
+## Environments
+
+- DEV = development
+- TEST = testing
+- PROD = production
+
 ## Snippets
 
 - **clg** : console.log
