@@ -5,8 +5,8 @@
 }
 
 html.light:root {
-  --primary-color: #f2f2f2;
-  --secondary-color: #f2f2f2;
+  --primary-color: #e4e4e4;
+  --secondary-color: #e4e4e4;
   --tertiary-color: #2c2c2c;
 }
 @font-face {
