@@ -47,9 +47,7 @@ export const Editor = () => {
   }, [settings]);
 
   useEffect(() => {
-    if (activeCode !== null) {
-      saveCodeUrl(activeCode);
-    }
+    saveCodeUrl(activeCode);
   }, [activeCode]);
 
   useEffect(() => {
