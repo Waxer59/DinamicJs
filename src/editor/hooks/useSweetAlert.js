@@ -26,7 +26,7 @@ export const useSweetAlert = () => {
     onGetCodeSavedByName,
     onSetUploadedCode
   } = useCodeStore();
-  const { onSetSnippets, snippets } = useSettingsStore();
+  const { onSetSnippets } = useSettingsStore();
   const { encodeText } = useRouteUrl();
 
   const throwToast = (icon, title) => {

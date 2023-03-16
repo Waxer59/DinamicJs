@@ -6,6 +6,8 @@ import { useCodeStore } from '../hooks/useCodeStore';
 import { useRouteUrl } from '../hooks/useRouteUrl';
 import { useSweetAlert } from '../hooks/useSweetAlert';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
+import { useSettingsStore } from '../hooks';
 
 export const CodeEditor = () => {
   const dropArea = useRef(null);
@@ -14,14 +16,21 @@ export const CodeEditor = () => {
     useCodeStore();
   const { getLocalStorageItem, setLocalStorageItem } = useLocalStorage();
   const { decodeText } = useRouteUrl();
+  const { onSetSnippets } = useSettingsStore();
 
   useEffect(() => {
+    const snippetsSaved = getLocalStorageItem(
+      LOCALSTORAGE_ITEMS.SNIPPETS_SAVED
+    );
+    if (snippetsSaved && snippetsSaved.length > 0) {
+      onSetSnippets(snippetsSaved);
+    }
     onSetActiveCode(decodeText());
-    onSetCodeSaved(getLocalStorageItem('codeSaved') ?? []);
+    onSetCodeSaved(getLocalStorageItem(LOCALSTORAGE_ITEMS.CODE_SAVED) ?? []);
   }, []);
 
   useEffect(() => {
-    setLocalStorageItem('codeSaved', codeSaved);
+    setLocalStorageItem(LOCALSTORAGE_ITEMS.CODE_SAVED, codeSaved);
   }, [codeSaved]);
 
   useEffect(() => {
