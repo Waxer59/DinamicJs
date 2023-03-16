@@ -4,6 +4,7 @@ import { useRouteUrl } from '../hooks/useRouteUrl';
 import { useCodeStore } from '../hooks/useCodeStore';
 import { useSettingsStore } from '../hooks/useSettingsStore';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
 
 export const Editor = () => {
   const [editor, setEditor] = useState(null);
@@ -50,7 +51,7 @@ export const Editor = () => {
   }, [activeCode]);
 
   useEffect(() => {
-    const settings = getLocalStorageItem('settings');
+    const settings = getLocalStorageItem(LOCALSTORAGE_ITEMS.SETTINGS);
     if (settings) {
       onSetSettings(settings);
     }

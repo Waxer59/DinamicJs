@@ -1,6 +1,8 @@
 import Swal from 'sweetalert2';
 import { DEFAULT_SETTINGS } from '../../constants/editorSettingsConstants';
+import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
 import { useCodeStore } from './useCodeStore';
+import { useLocalStorage } from './useLocalStorage';
 import { useRouteUrl } from './useRouteUrl';
 import { useSettingsStore } from './useSettingsStore';
 
@@ -27,6 +29,7 @@ export const useSweetAlert = () => {
     onGetCodeSavedByName,
     onSetUploadedCode
   } = useCodeStore();
+  const { removeLocalStorageItem } = useLocalStorage();
   const { onSetSnippets, onSetSettings } = useSettingsStore();
   const { encodeText } = useRouteUrl();
 
@@ -384,7 +387,7 @@ export const useSweetAlert = () => {
             (result) => {
               if (result.isConfirmed) {
                 Swal.close();
-                localStorage.removeItem('settings');
+                removeLocalStorageItem(LOCALSTORAGE_ITEMS.SETTINGS);
                 onSetSettings(DEFAULT_SETTINGS);
               }
               return result;
