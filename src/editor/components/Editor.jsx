@@ -9,9 +9,8 @@ export const Editor = () => {
   const [editor, setEditor] = useState(null);
   const { decodeText, saveCodeUrl } = useRouteUrl();
   const { onSetActiveCode, uploadedCode, activeCode } = useCodeStore();
-  const { onSetSettings } = useSettingsStore();
+  const { onSetSettings, settings } = useSettingsStore();
   const { getLocalStorageItem } = useLocalStorage();
-  const { settings } = useSettingsStore();
   const monacoEl = useRef(null);
 
   useEffect(() => {

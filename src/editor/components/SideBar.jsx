@@ -6,9 +6,9 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import confetti from 'canvas-confetti';
 
 export const SideBar = () => {
-  const { throwAlert, throwConfig, throwLocalSave, throwToast } =
+  const { throwAlert, throwConfig, throwLocalSaves, throwToast } =
     useSweetAlert();
-  const { settings, onSetSettings } = useSettingsStore();
+  const { settings, onSetSettings, snippets } = useSettingsStore();
   const { setLocalStorageItem } = useLocalStorage();
   const { activeCode, codeSaved } = useCodeStore();
 
@@ -34,13 +34,13 @@ export const SideBar = () => {
   };
 
   const onConfigClick = async () => {
-    const configValue = await throwConfig(settings);
+    const configValue = await throwConfig({ ...settings, snippets });
     onSetSettings(configValue);
     setLocalStorageItem('settings', configValue);
   };
 
   const onLocalSaveClick = () => {
-    throwLocalSave(codeSaved);
+    throwLocalSaves(codeSaved);
   };
 
   return (

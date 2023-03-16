@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSettings } from '../../store/slices/settings/settingsSlice';
+import {
+  setSettings,
+  setSnippets
+} from '../../store/slices/settings/settingsSlice';
 
 export const useSettingsStore = () => {
   const dispatch = useDispatch();
-  const { settings } = useSelector((state) => state.settings);
+  const { settings, snippets } = useSelector((state) => state.settings);
 
   useEffect(() => {
     document.querySelector('html').className =
@@ -14,8 +17,15 @@ export const useSettingsStore = () => {
   const onSetSettings = (settings) => {
     dispatch(setSettings(settings));
   };
+
+  const onSetSnippets = (snippets) => {
+    dispatch(setSnippets(snippets));
+  };
+
   return {
     onSetSettings,
-    settings
+    onSetSnippets,
+    settings,
+    snippets
   };
 };
