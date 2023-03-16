@@ -1,5 +1,8 @@
 import Swal from 'sweetalert2';
-import { DEFAULT_SETTINGS } from '../../constants/editorSettingsConstants';
+import {
+  DEFAULT_SETTINGS,
+  DEFAULT_SNIPPETS
+} from '../../constants/editorSettingsConstants';
 import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
 import { useCodeStore } from './useCodeStore';
 import { useLocalStorage } from './useLocalStorage';
@@ -199,16 +202,17 @@ export const useSweetAlert = () => {
                 </li>`;
             });
 
-            await throwModal({
-              title: 'Custom snippets',
-              customClass,
-              heightAuto: false,
-              showCloseButton: true,
-              showCancelButton: false,
-              showConfirmButton: false,
-              denyButtonText: 'Reset',
-              showDenyButton: true,
-              html: `
+            await throwModal(
+              {
+                title: 'Custom snippets',
+                customClass,
+                heightAuto: false,
+                showCloseButton: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+                denyButtonText: 'Reset',
+                showDenyButton: true,
+                html: `
                 <style>
                   .overwrite-btn{
                     background: #FFBC49 !important;
@@ -286,60 +290,88 @@ export const useSweetAlert = () => {
                     </ul>
                     </div>
                   </div>`,
-              didOpen: async () => {
-                const saveBtn = document.getElementById('save-btn');
-                const editBtns = document.querySelectorAll('.edit-btn');
-                const deleteBtns = document.querySelectorAll('.delete-btn');
+                didOpen: async () => {
+                  const saveBtn = document.getElementById('save-btn');
+                  const editBtns = document.querySelectorAll('.edit-btn');
+                  const deleteBtns = document.querySelectorAll('.delete-btn');
 
-                editBtns.forEach((btn) => {
-                  btn.addEventListener('click', async () => {
-                    const name = await throwAlert(
-                      'Editing',
-                      `You are editing "${btn.getAttribute('data-name')}"`
-                    );
-                    if (name) {
-                      onRenameCodeSaved(btn.getAttribute('data-name'), name);
-                      throwToast('success', 'Saved');
-                      return;
-                    }
-                    throwToast('error', 'Canceled');
-                  });
-                });
-
-                deleteBtns.forEach((btn) => {
-                  btn.addEventListener('click', async () => {
-                    const snippetLabel = btn.getAttribute('data-name');
-                    const name = await throwAlert(
-                      'Deleting',
-                      `You are deleting "${snippetLabel}" type the name to confirm`
-                    );
-                    if (name === snippetLabel) {
-                      onSetSnippets(
-                        snippets.filter(({ label }) => label !== snippetLabel)
+                  editBtns.forEach((btn) => {
+                    btn.addEventListener('click', async () => {
+                      const name = await throwAlert(
+                        'Editing',
+                        `You are editing "${btn.getAttribute('data-name')}"`
                       );
-                      throwToast('success', 'Deleted');
+                      if (name) {
+                        onRenameCodeSaved(btn.getAttribute('data-name'), name);
+                        throwToast('success', 'Saved');
+                        return;
+                      }
+                      throwToast('error', 'Canceled');
+                    });
+                  });
+
+                  deleteBtns.forEach((btn) => {
+                    btn.addEventListener('click', async () => {
+                      const snippetLabel = btn.getAttribute('data-name');
+                      const name = await throwAlert(
+                        'Deleting',
+                        `You are deleting "${snippetLabel}" type the name to confirm`
+                      );
+                      if (name === snippetLabel) {
+                        onSetSnippets(
+                          snippets.filter(({ label }) => label !== snippetLabel)
+                        );
+                        throwToast('success', 'Deleted');
+                        return;
+                      }
+                      throwToast('error', 'Canceled');
+                    });
+                  });
+
+                  saveBtn.addEventListener('click', async () => {
+                    const name = await throwAlert(
+                      'New Snippet',
+                      'This snippet will be saved locally'
+                    );
+                    if (onCheckNameAndCode(name)) {
+                      throwToast('error', 'This name already exists');
                       return;
                     }
-                    throwToast('error', 'Canceled');
+                    if (name && name.trim() !== '') {
+                      onAddCodeSaved(name, encodeText(activeCode));
+                      throwToast('success', 'Saved');
+                    }
                   });
-                });
-
-                saveBtn.addEventListener('click', async () => {
-                  const name = await throwAlert(
-                    'New Snippet',
-                    'This snippet will be saved locally'
+                }
+              },
+              async (result) => {
+                if (result.isDenied) {
+                  await throwModal(
+                    {
+                      title: 'Are you sure?',
+                      customClass,
+                      heightAuto: false,
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes, reset it!'
+                    },
+                    (result) => {
+                      if (result.isConfirmed) {
+                        Swal.close();
+                        removeLocalStorageItem(
+                          LOCALSTORAGE_ITEMS.SNIPPETS_SAVED
+                        );
+                        onSetSnippets(DEFAULT_SNIPPETS);
+                      }
+                      return result;
+                    }
                   );
-                  if (onCheckNameAndCode(name)) {
-                    throwToast('error', 'This name already exists');
-                    return;
-                  }
-                  if (name && name.trim() !== '') {
-                    onAddCodeSaved(name, encodeText(activeCode));
-                    throwToast('success', 'Saved');
-                  }
-                });
+                }
+                return result;
               }
-            });
+            );
           });
         },
         preConfirm: () => {
