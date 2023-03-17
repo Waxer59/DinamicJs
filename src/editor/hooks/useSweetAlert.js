@@ -35,8 +35,14 @@ export const useSweetAlert = () => {
     onSetUploadedCode
   } = useCodeStore();
   const { removeLocalStorageItem } = useLocalStorage();
-  const { onSetSnippets, onSetSettings, onAddNewSnippet, onRemoveSnippet } =
-    useSettingsStore();
+  const {
+    onSetSnippets,
+    onSetSettings,
+    onAddNewSnippet,
+    onRemoveSnippet,
+    onGetSnippetByLabel,
+    onEditSnippet
+  } = useSettingsStore();
   const { encodeBase64 } = useRouteUrl();
 
   const throwToast = (icon, title) => {
@@ -148,171 +154,8 @@ export const useSweetAlert = () => {
         showDenyButton: true,
         didOpen: () => {
           const snippetsBtn = document.querySelector('#config__snippets');
-
           snippetsBtn.addEventListener('click', async () => {
-            let htmlSavesList = '';
-            snippets.forEach((snippet, index) => {
-              htmlSavesList += `
-                <li>
-                  <button class="save-item__name" title="${snippet.label}" id="code-btn" data-name="${snippet.label}">${snippet.label}</button>
-                  <div class="save-item__actions">
-                  <button class="save-item__btn edit-btn" id="snippet-item__btn-${index}" data-name="${snippet.label}" title="Edit snippet" ><i class="fa-solid fa-pen-to-square"></i></button>
-                  <button class="save-item__btn delete-btn" id="snippet-item__btn-${index}" data-name="${snippet.label}" title="Delete snippet" ><i class="fa-solid fa-trash"></i></button>
-                  </div>
-                </li>`;
-            });
-
-            await throwModal(
-              {
-                title: 'Custom snippets',
-                customClass,
-                heightAuto: false,
-                showCloseButton: true,
-                showCancelButton: false,
-                showConfirmButton: false,
-                denyButtonText: 'Reset',
-                showDenyButton: true,
-                html: `
-                  <div class="config">
-                    <div class="config__item">
-                    <button class="save-btn" id="newSnippet-btn">New snippet</button>
-                    </div>
-                    <div class="config__item">
-                    <ul class="items-saved">
-                      ${htmlSavesList}
-                    </ul>
-                    </div>
-                  </div>`,
-                didOpen: async () => {
-                  const newSnippetBtn =
-                    document.getElementById('newSnippet-btn');
-                  const editBtns = document.querySelectorAll('.edit-btn');
-                  const deleteBtns = document.querySelectorAll('.delete-btn');
-
-                  editBtns.forEach((btn) => {
-                    btn.addEventListener('click', async () => {
-                      const snippetLabel = btn.getAttribute('data-name');
-                      const snippetNewLabel = await throwTextAlert(
-                        {
-                          title: 'Editing',
-                          inputLabel: `You are editing "${snippetLabel}"`,
-                          icon: SWAL2_ICONS.INFO
-                        },
-                        snippetLabel
-                      );
-                      if (snippetNewLabel) {
-                        onRenameCodeSaved(snippetLabel, snippetNewLabel);
-                        throwToast(SWAL2_ICONS.SUCCESS, 'Saved');
-                      }
-                    });
-                  });
-
-                  deleteBtns.forEach((btn) => {
-                    btn.addEventListener('click', async () => {
-                      const snippetLabel = btn.getAttribute('data-name');
-                      const confirmSnippetLabel = await throwTextAlert(
-                        {
-                          title: 'Deleting',
-                          inputLabel: `You are deleting "${snippetLabel}" type the name to confirm`,
-                          icon: SWAL2_ICONS.WARNING
-                        },
-                        snippetLabel
-                      );
-                      if (confirmSnippetLabel) {
-                        onRemoveSnippet(snippetLabel);
-                        throwToast(SWAL2_ICONS.SUCCESS, 'Deleted');
-                      }
-                    });
-                  });
-
-                  newSnippetBtn.addEventListener('click', async () => {
-                    await throwModal(
-                      {
-                        title: 'New Snippet',
-                        html: `<input id="snippet-label" type="text" class="swal2-input" placeholder="Label">
-                             <input id="snippet-documentation" class="swal2-input" type="text" placeholder="Documentation">
-                             <textarea id="snippet-insertText" class="swal2-textarea" placeholder="Insert text"></textarea>`,
-                        customClass,
-                        heightAuto: false,
-                        showCloseButton: true,
-                        showLoaderOnConfirm: false,
-                        showCancelButton: true,
-                        confirmButtonText: 'Save',
-                        preConfirm: () => {
-                          const labelValue =
-                            document.querySelector('#snippet-label').value;
-                          const documentationValue = document.querySelector(
-                            '#snippet-documentation'
-                          ).value;
-                          const insertTextValue = document.querySelector(
-                            '#snippet-insertText'
-                          ).value;
-
-                          if (
-                            ![
-                              labelValue,
-                              documentationValue,
-                              insertTextValue
-                            ].every((el) => el.trim().length > 0)
-                          ) {
-                            Swal.showValidationMessage(
-                              'Please fill in all fields'
-                            );
-                          }
-                        }
-                      },
-                      (result) => {
-                        if (result.isConfirmed) {
-                          const labelValue =
-                            document.querySelector('#snippet-label').value;
-                          const documentationValue = document.querySelector(
-                            '#snippet-documentation'
-                          ).value;
-                          const insertTextValue = document.querySelector(
-                            '#snippet-insertText'
-                          ).value;
-
-                          onAddNewSnippet(
-                            labelValue,
-                            documentationValue,
-                            insertTextValue
-                          );
-                          throwToast(SWAL2_ICONS.SUCCESS, 'Snippet Saved!');
-                        }
-                      }
-                    );
-                  });
-                }
-              },
-              async (result) => {
-                if (result.isDenied) {
-                  await throwModal(
-                    {
-                      title: 'Are you sure?',
-                      customClass,
-                      heightAuto: false,
-                      icon: SWAL2_ICONS.WARNING,
-                      showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Yes, reset it!'
-                    },
-                    (result) => {
-                      if (result.isConfirmed) {
-                        Swal.close();
-                        removeLocalStorageItem(
-                          LOCALSTORAGE_ITEMS.SNIPPETS_SAVED
-                        );
-                        onSetSnippets(DEFAULT_SNIPPETS);
-                        throwToast(SWAL2_ICONS.SUCCESS, 'Snippets reseted');
-                      }
-                      return result;
-                    }
-                  );
-                }
-                return result;
-              }
-            );
+            throwSnippetsSettings(snippets);
           });
         },
         preConfirm: () => {
@@ -361,8 +204,10 @@ export const useSweetAlert = () => {
               if (result.isConfirmed) {
                 Swal.close();
                 removeLocalStorageItem(LOCALSTORAGE_ITEMS.SETTINGS);
-                throwToast(SWAL2_ICONS.SUCCESS, 'Settings reseted');
+                removeLocalStorageItem(LOCALSTORAGE_ITEMS.SNIPPETS_SAVED);
                 onSetSettings(DEFAULT_SETTINGS);
+                onSetSnippets(DEFAULT_SNIPPETS);
+                throwToast(SWAL2_ICONS.SUCCESS, 'Settings reseted');
               }
               return result;
             }
@@ -372,6 +217,207 @@ export const useSweetAlert = () => {
       }
     );
     return value;
+  };
+
+  const throwSnippetsSettings = async (snippets = []) => {
+    let htmlSavesList = '';
+    snippets.forEach((snippet, index) => {
+      htmlSavesList += `
+          <li>
+            <button class="save-item__name" title="${snippet.label}" id="code-btn" data-name="${snippet.label}">${snippet.label}</button>
+            <div class="save-item__actions">
+            <button class="save-item__btn edit-btn" id="snippet-item__btn-${index}" data-name="${snippet.label}" title="Edit snippet" ><i class="fa-solid fa-pen-to-square"></i></button>
+            <button class="save-item__btn delete-btn" id="snippet-item__btn-${index}" data-name="${snippet.label}" title="Delete snippet" ><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </li>`;
+    });
+
+    await throwModal(
+      {
+        title: 'Custom snippets',
+        customClass,
+        heightAuto: false,
+        showCloseButton: true,
+        showCancelButton: false,
+        showConfirmButton: false,
+        denyButtonText: 'Reset',
+        showDenyButton: true,
+        html: `
+            <div class="config">
+              <div class="config__item">
+              <button class="save-btn" id="newSnippet-btn">New snippet</button>
+              </div>
+              <div class="config__item">
+              <ul class="items-saved">
+                ${htmlSavesList}
+              </ul>
+              </div>
+            </div>`,
+        didOpen: async () => {
+          const newSnippetBtn = document.getElementById('newSnippet-btn');
+          const editBtns = document.querySelectorAll('.edit-btn');
+          const deleteBtns = document.querySelectorAll('.delete-btn');
+
+          editBtns.forEach((btn) => {
+            btn.addEventListener('click', async () => {
+              const snippetLabel = btn.getAttribute('data-name');
+
+              const { label, insertText, documentation } =
+                onGetSnippetByLabel(snippetLabel);
+
+              await throwModal(
+                {
+                  title: 'Edit Snippet',
+                  html: `<input id="snippet-label" type="text" class="swal2-input" value="${label}" placeholder="Label">
+                         <input id="snippet-documentation" class="swal2-input" value="${documentation}" type="text" placeholder="Documentation">
+                         <textarea id="snippet-insertText" class="swal2-textarea" placeholder="Insert text">${insertText}</textarea>`,
+                  customClass,
+                  heightAuto: false,
+                  showCloseButton: true,
+                  showLoaderOnConfirm: false,
+                  showCancelButton: true,
+                  confirmButtonText: 'Save',
+                  preConfirm: () => {
+                    const labelValue =
+                      document.querySelector('#snippet-label').value;
+                    const documentationValue = document.querySelector(
+                      '#snippet-documentation'
+                    ).value;
+                    const insertTextValue = document.querySelector(
+                      '#snippet-insertText'
+                    ).value;
+
+                    if (
+                      ![labelValue, documentationValue, insertTextValue].every(
+                        (el) => el.trim().length > 0
+                      )
+                    ) {
+                      Swal.showValidationMessage('Please fill in all fields');
+                    }
+                  }
+                },
+                (result) => {
+                  if (result.isConfirmed) {
+                    const label =
+                      document.querySelector('#snippet-label').value;
+                    const documentation = document.querySelector(
+                      '#snippet-documentation'
+                    ).value;
+                    const insertText = document.querySelector(
+                      '#snippet-insertText'
+                    ).value;
+                    onEditSnippet({
+                      snippetToChangeLabel: snippetLabel,
+                      label,
+                      documentation,
+                      insertText
+                    });
+                    throwToast(SWAL2_ICONS.SUCCESS, 'Snippet Edited!');
+                  }
+                }
+              );
+            });
+          });
+
+          deleteBtns.forEach((btn) => {
+            btn.addEventListener('click', async () => {
+              const snippetLabel = btn.getAttribute('data-name');
+              const confirmSnippetLabel = await throwTextAlert(
+                {
+                  title: 'Deleting',
+                  inputLabel: `You are deleting "${snippetLabel}" type the name to confirm`,
+                  icon: SWAL2_ICONS.WARNING
+                },
+                snippetLabel
+              );
+              if (confirmSnippetLabel) {
+                onRemoveSnippet(snippetLabel);
+                throwToast(SWAL2_ICONS.SUCCESS, 'Deleted');
+              }
+            });
+          });
+
+          newSnippetBtn.addEventListener('click', async () => {
+            await throwModal(
+              {
+                title: 'New Snippet',
+                html: `<input id="snippet-label" type="text" class="swal2-input" placeholder="Label">
+                       <input id="snippet-documentation" class="swal2-input" type="text" placeholder="Documentation">
+                       <textarea id="snippet-insertText" class="swal2-textarea" placeholder="Insert text"></textarea>`,
+                customClass,
+                heightAuto: false,
+                showCloseButton: true,
+                showLoaderOnConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                preConfirm: () => {
+                  const labelValue =
+                    document.querySelector('#snippet-label').value;
+                  const documentationValue = document.querySelector(
+                    '#snippet-documentation'
+                  ).value;
+                  const insertTextValue = document.querySelector(
+                    '#snippet-insertText'
+                  ).value;
+
+                  if (
+                    ![labelValue, documentationValue, insertTextValue].every(
+                      (el) => el.trim().length > 0
+                    )
+                  ) {
+                    Swal.showValidationMessage('Please fill in all fields');
+                  }
+                }
+              },
+              (result) => {
+                if (result.isConfirmed) {
+                  const labelValue =
+                    document.querySelector('#snippet-label').value;
+                  const documentationValue = document.querySelector(
+                    '#snippet-documentation'
+                  ).value;
+                  const insertTextValue = document.querySelector(
+                    '#snippet-insertText'
+                  ).value;
+                  onAddNewSnippet(
+                    labelValue,
+                    documentationValue,
+                    insertTextValue
+                  );
+                  throwToast(SWAL2_ICONS.SUCCESS, 'Snippet Saved!');
+                }
+              }
+            );
+          });
+        }
+      },
+      async (result) => {
+        if (result.isDenied) {
+          await throwModal(
+            {
+              title: 'Are you sure?',
+              customClass,
+              heightAuto: false,
+              icon: SWAL2_ICONS.WARNING,
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, reset it!'
+            },
+            (result) => {
+              if (result.isConfirmed) {
+                Swal.close();
+                removeLocalStorageItem(LOCALSTORAGE_ITEMS.SNIPPETS_SAVED);
+                onSetSnippets(DEFAULT_SNIPPETS);
+                throwToast(SWAL2_ICONS.SUCCESS, 'Snippets reseted');
+              }
+              return result;
+            }
+          );
+        }
+        return result;
+      }
+    );
   };
 
   const throwLocalSaves = async (saves = []) => {

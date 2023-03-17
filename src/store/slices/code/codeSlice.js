@@ -4,7 +4,7 @@ export const codeSlice = createSlice({
   name: 'code',
   initialState: {
     codeSaved: [], // when user saves a file localy, it will be stored here
-    activeCode: null,
+    activeCode: '',
     uploadedCode: [] // when user uploads a file, it will be stored here and then reset
   },
   reducers: {

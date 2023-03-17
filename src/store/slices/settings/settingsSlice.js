@@ -36,9 +36,28 @@ export const settingsSlice = createSlice({
       const { label } = payload;
       const newSnippets = state.snippets.filter((el) => el.label !== label);
       state.snippets = newSnippets;
+    },
+    editSnippet: (state, { payload }) => {
+      const { snippetToChangeLabel, ...configuration } = payload;
+
+      const newSnippetArray = state.snippets.map((snippet) => {
+        if (snippet.label === snippetToChangeLabel) {
+          return {
+            ...snippet.label,
+            ...configuration
+          };
+        }
+        return snippet;
+      });
+      state.snippets = newSnippetArray;
     }
   }
 });
 
-export const { setSettings, setSnippets, addNewSnippet, removeSnippet } =
-  settingsSlice.actions;
+export const {
+  setSettings,
+  setSnippets,
+  addNewSnippet,
+  removeSnippet,
+  editSnippet
+} = settingsSlice.actions;

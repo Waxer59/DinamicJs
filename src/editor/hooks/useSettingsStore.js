@@ -3,7 +3,8 @@ import {
   setSettings,
   setSnippets,
   addNewSnippet,
-  removeSnippet
+  removeSnippet,
+  editSnippet
 } from '../../store/slices/settings/settingsSlice';
 
 export const useSettingsStore = () => {
@@ -26,12 +27,29 @@ export const useSettingsStore = () => {
     dispatch(removeSnippet({ label }));
   };
 
+  const onEditSnippet = ({
+    label,
+    documentation,
+    insertText,
+    snippetToChangeLabel
+  }) => {
+    dispatch(
+      editSnippet({ label, documentation, insertText, snippetToChangeLabel })
+    );
+  };
+
+  const onGetSnippetByLabel = (label) => {
+    return snippets.filter((el) => el.label === label)[0];
+  };
+
   return {
     onSetSettings,
     onSetSnippets,
     settings,
     snippets,
     onAddNewSnippet,
-    onRemoveSnippet
+    onRemoveSnippet,
+    onEditSnippet,
+    onGetSnippetByLabel
   };
 };
