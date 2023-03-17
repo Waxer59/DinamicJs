@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
 import {
   addCodeSaved,
   removeCodeSaved,
@@ -8,14 +10,18 @@ import {
   setCodeSaved,
   setUploadedCode
 } from '../../store/slices/code/codeSlice';
+import { useLocalStorage } from './useLocalStorage';
 import { useRouteUrl } from './useRouteUrl';
 
 export const useCodeStore = () => {
   const dispatch = useDispatch();
-  const { encodeText, decodeByCode } = useRouteUrl();
+  const { encodeText, decodeByCode, decodeText } = useRouteUrl();
+  const { getLocalStorageItem, setLocalStorageItem } = useLocalStorage();
   const { codeSaved, activeCode, uploadedCode } = useSelector(
     (state) => state.code
   );
+  const { saveCodeUrl } = useRouteUrl();
+
   const onAddCodeSaved = (name, code = encodeText(activeCode)) => {
     dispatch(addCodeSaved({ name, code }));
   };
@@ -56,6 +62,20 @@ export const useCodeStore = () => {
     }
     return false;
   };
+
+  useEffect(() => {
+    const codeSaved = getLocalStorageItem(LOCALSTORAGE_ITEMS.CODE_SAVED);
+    onSetActiveCode(decodeText());
+    onSetCodeSaved(Array.isArray(codeSaved) ? codeSaved : []);
+  }, []);
+
+  useEffect(() => {
+    setLocalStorageItem(LOCALSTORAGE_ITEMS.CODE_SAVED, codeSaved);
+  }, [codeSaved]);
+
+  useEffect(() => {
+    saveCodeUrl(activeCode);
+  }, [activeCode]);
 
   return {
     onAddCodeSaved,

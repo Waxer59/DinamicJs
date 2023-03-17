@@ -3,36 +3,13 @@ import Split from 'react-split';
 import { CodePreviewer } from './CodePreviewer';
 import { useEffect, useRef } from 'react';
 import { useCodeStore } from '../hooks/useCodeStore';
-import { useRouteUrl } from '../hooks/useRouteUrl';
 import { useSweetAlert } from '../hooks/useSweetAlert';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
-import { useSettingsStore } from '../hooks';
 import { SWAL2_ICONS } from '../../constants/sweetAlertIconsConstants';
 
 export const CodeEditor = () => {
   const dropArea = useRef(null);
   const { throwToast } = useSweetAlert();
-  const { onSetActiveCode, onSetUploadedCode, onSetCodeSaved, codeSaved } =
-    useCodeStore();
-  const { getLocalStorageItem, setLocalStorageItem } = useLocalStorage();
-  const { decodeText } = useRouteUrl();
-  const { onSetSnippets } = useSettingsStore();
-
-  useEffect(() => {
-    const snippetsSaved = getLocalStorageItem(
-      LOCALSTORAGE_ITEMS.SNIPPETS_SAVED
-    );
-    if (snippetsSaved && snippetsSaved.length > 0) {
-      onSetSnippets(snippetsSaved);
-    }
-    onSetActiveCode(decodeText());
-    onSetCodeSaved(getLocalStorageItem(LOCALSTORAGE_ITEMS.CODE_SAVED) ?? []);
-  }, []);
-
-  useEffect(() => {
-    setLocalStorageItem(LOCALSTORAGE_ITEMS.CODE_SAVED, codeSaved);
-  }, [codeSaved]);
+  const { onSetUploadedCode } = useCodeStore();
 
   useEffect(() => {
     const getTextFromFile = (file) => {

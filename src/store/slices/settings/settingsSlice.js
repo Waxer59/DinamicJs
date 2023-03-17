@@ -33,8 +33,8 @@ export const settingsSlice = createSlice({
       });
     },
     removeSnippet: (state, { payload }) => {
-      const newSnippets = state.snippets.filter((el) => el.label !== payload);
-      console.log(newSnippets);
+      const { label } = payload;
+      const newSnippets = state.snippets.filter((el) => el.label !== label);
       state.snippets = newSnippets;
     }
   }
