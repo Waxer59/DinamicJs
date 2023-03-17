@@ -8,6 +8,7 @@ import { useSweetAlert } from '../hooks/useSweetAlert';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
 import { useSettingsStore } from '../hooks';
+import { SWAL2_ICONS } from '../../constants/sweetAlertIconsConstants';
 
 export const CodeEditor = () => {
   const dropArea = useRef(null);
@@ -53,12 +54,12 @@ export const CodeEditor = () => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
         if (file.type !== 'text/javascript') {
-          throwToast('error', 'Invalid file type');
+          throwToast(SWAL2_ICONS.ERROR, 'Invalid file type');
           onSetUploadedCode('');
         } else {
           const text = await getTextFromFile(file);
           onSetUploadedCode(text);
-          throwToast('success', 'File uploaded successfully');
+          throwToast(SWAL2_ICONS.SUCCESS, 'File uploaded successfully');
         }
       },
       false

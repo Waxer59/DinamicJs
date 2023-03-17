@@ -5,9 +5,10 @@ import { useSettingsStore } from '../hooks/useSettingsStore';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import confetti from 'canvas-confetti';
 import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
+import { SWAL2_ICONS } from '../../constants/sweetAlertIconsConstants';
 
 export const SideBar = () => {
-  const { throwAlert, throwConfig, throwLocalSaves, throwToast } =
+  const { throwTextAlert, throwConfig, throwLocalSaves, throwToast } =
     useSweetAlert();
   const { settings, onSetSettings, snippets } = useSettingsStore();
   const { setLocalStorageItem } = useLocalStorage();
@@ -18,14 +19,14 @@ export const SideBar = () => {
   };
 
   const onDownloadClick = async () => {
-    const fileName = await throwAlert(
-      'File name',
-      'Dont put any extension',
-      'info'
-    );
+    const fileName = await throwTextAlert({
+      title: 'File name',
+      inputLabel: 'Dont put any extension',
+      icon: SWAL2_ICONS.QUESTION
+    });
     if (fileName) {
       downloadjs(activeCode, `${fileName}.js`, 'text/javascript');
-      throwToast('success', 'Downloaded');
+      throwToast(SWAL2_ICONS.SUCCESS, 'Downloaded');
       confetti({
         particleCount: 100,
         spread: 70,

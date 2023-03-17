@@ -23,7 +23,7 @@ yarn dev
 - TEST = testing
 - PROD = production
 
-## Snippets
+## Default Snippets
 
 - **clg** : console.log
 - **imp** : import

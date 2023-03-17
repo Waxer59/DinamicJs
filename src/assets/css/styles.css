@@ -28,6 +28,127 @@ html.light:root {
   background: var(--primary-color) !important;
 }
 
+.swal2-input,
+.swal2-textarea {
+  width: 100% !important;
+  max-width: 80%;
+}
+
+.overwrite-btn {
+  background: #ffbc49 !important;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.save-item__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+}
+.save-item__name {
+  width: 60%;
+  color: #fff;
+  background: #252627 !important;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.save-btn {
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.items-saved {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.items-saved li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.items-saved li button {
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.config {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+select{
+  border-radius: 5px;
+  padding: 2px;
+  border: 1px solid #ccc;
+  outline: none;
+  border: none;
+  background: rgba( 255, 255, 255, 0.5 );
+  backdrop-filter: blur( 20px );
+  -webkit-backdrop-filter: blur( 20px );
+  border-radius: 10px;
+}
+input[type="number"] {
+  padding: 2px;
+  border: 1px solid #ccc;
+  text-align: center;
+  outline: none;
+  border: none;
+  background: rgba( 255, 255, 255, 0.5 );
+  backdrop-filter: blur( 20px );
+  -webkit-backdrop-filter: blur( 20px );
+  border-radius: 10px;
+}
+input[type="checkbox"] {
+  margin: 0;
+  padding: 0;
+  width: 1rem;
+  height: 1rem;
+  outline: none;
+  border: none;
+  background: rgba( 255, 255, 255, 0.5 );
+  backdrop-filter: blur( 20px );
+  -webkit-backdrop-filter: blur( 20px );
+  border-radius: 10px;
+}
+.config-btn{
+  background: #007FFF;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  color: #FFF;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background: #2196f3 !important;
+}
+
+.delete-btn {
+  background: #f44336 !important;
+}
+
 * {
   box-sizing: border-box;
 }

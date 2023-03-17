@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setSettings,
-  setSnippets
+  setSnippets,
+  addNewSnippet,
+  removeSnippet
 } from '../../store/slices/settings/settingsSlice';
 
 export const useSettingsStore = () => {
@@ -22,10 +24,20 @@ export const useSettingsStore = () => {
     dispatch(setSnippets(snippets));
   };
 
+  const onAddNewSnippet = (label, documentation, insertText) => {
+    dispatch(addNewSnippet(label, documentation, insertText));
+  };
+
+  const onRemoveSnippet = (label) => {
+    dispatch(removeSnippet(label));
+  };
+
   return {
     onSetSettings,
     onSetSnippets,
     settings,
-    snippets
+    snippets,
+    onAddNewSnippet,
+    onRemoveSnippet
   };
 };
