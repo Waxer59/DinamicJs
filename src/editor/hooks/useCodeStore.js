@@ -15,14 +15,14 @@ import { useRouteUrl } from './useRouteUrl';
 
 export const useCodeStore = () => {
   const dispatch = useDispatch();
-  const { encodeText, decodeByCode, decodeText } = useRouteUrl();
+  const { encodeBase64, decodeBase64, getBase64Param } = useRouteUrl();
   const { getLocalStorageItem, setLocalStorageItem } = useLocalStorage();
+  const { saveBase64ToUrl } = useRouteUrl();
   const { codeSaved, activeCode, uploadedCode } = useSelector(
     (state) => state.code
   );
-  const { saveCodeUrl } = useRouteUrl();
 
-  const onAddCodeSaved = (name, code = encodeText(activeCode)) => {
+  const onAddCodeSaved = (name, code = encodeBase64(activeCode)) => {
     dispatch(addCodeSaved({ name, code }));
   };
 
@@ -46,7 +46,7 @@ export const useCodeStore = () => {
   const onGetCodeSavedByName = (name) => {
     const code = codeSaved.find((code) => code.name === name);
     if (code) {
-      return decodeByCode(code.code);
+      return decodeBase64(code.code);
     }
     return '';
   };
@@ -65,7 +65,7 @@ export const useCodeStore = () => {
 
   useEffect(() => {
     const codeSaved = getLocalStorageItem(LOCALSTORAGE_ITEMS.CODE_SAVED);
-    onSetActiveCode(decodeText());
+    onSetActiveCode(decodeBase64(getBase64Param()));
     onSetCodeSaved(Array.isArray(codeSaved) ? codeSaved : []);
   }, []);
 
@@ -74,7 +74,7 @@ export const useCodeStore = () => {
   }, [codeSaved]);
 
   useEffect(() => {
-    saveCodeUrl(activeCode);
+    saveBase64ToUrl(activeCode);
   }, [activeCode]);
 
   return {

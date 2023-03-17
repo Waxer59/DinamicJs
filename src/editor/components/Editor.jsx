@@ -6,7 +6,7 @@ import { useSettingsStore } from '../hooks/useSettingsStore';
 
 export const Editor = () => {
   const [editor, setEditor] = useState(null);
-  const { decodeText } = useRouteUrl();
+  const { decodeBase64, getBase64Param } = useRouteUrl();
   const { onSetActiveCode, uploadedCode } = useCodeStore();
   const { settings } = useSettingsStore();
   const monacoEl = useRef(null);
@@ -15,7 +15,7 @@ export const Editor = () => {
     if (monacoEl.current && !editor) {
       setEditor(
         monaco.editor.create(monacoEl.current, {
-          value: decodeText(),
+          value: decodeBase64(getBase64Param()),
           language: 'javascript',
           automaticLayout: true, // resize the code area
           padding: {

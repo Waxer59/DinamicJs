@@ -1,31 +1,17 @@
 import { useEffect } from 'react';
 import { CodeEditor, SideBar } from '../components';
-import {
-  useCodeStore,
-  useLocalStorage,
-  useRouteUrl,
-  useSettingsStore
-} from '../hooks';
-import { setSnippets } from '../helpers/editorSnippets';
+import { useCodeStore, useRouteUrl } from '../hooks';
 import '../helpers/userWorker';
-import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
 
 export const EditorPage = () => {
   const { onSetUploadedCode } = useCodeStore();
-  const { decodeByCode, getBase64Param } = useRouteUrl();
-  const { snippets } = useSettingsStore();
-  const { setLocalStorageItem } = useLocalStorage();
+  const { decodeBase64, getBase64Param } = useRouteUrl();
 
   useEffect(() => {
     window.onpopstate = (event) => {
-      onSetUploadedCode(decodeByCode(getBase64Param()));
+      onSetUploadedCode(decodeBase64(getBase64Param()));
     };
   }, []);
-
-  useEffect(() => {
-    setSnippets(snippets);
-    setLocalStorageItem(LOCALSTORAGE_ITEMS.SNIPPETS_SAVED, snippets);
-  }, [snippets]);
 
   return (
     <>

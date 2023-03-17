@@ -9,7 +9,7 @@ monaco.languages.registerCompletionItemProvider('javascript', {
   }
 });
 
-export const setSnippets = (newSnippets = []) => {
+export const setEditorSnippets = (newSnippets = []) => {
   snippets = newSnippets;
   monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
     target: monaco.languages.typescript.ScriptTarget.ESNext,

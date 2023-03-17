@@ -8,12 +8,13 @@ import {
   addNewSnippet,
   removeSnippet
 } from '../../store/slices/settings/settingsSlice';
+import { setEditorSnippets } from '../helpers/editorSnippets';
 import { useLocalStorage } from './useLocalStorage';
 
 export const useSettingsStore = () => {
   const dispatch = useDispatch();
   const { settings, snippets } = useSelector((state) => state.settings);
-  const { getLocalStorageItem } = useLocalStorage();
+  const { setLocalStorageItem, getLocalStorageItem } = useLocalStorage();
 
   useEffect(() => {
     document.querySelector('html').className =
@@ -32,6 +33,11 @@ export const useSettingsStore = () => {
       onSetSettings(settings);
     }
   }, []);
+
+  useEffect(() => {
+    setEditorSnippets(snippets);
+    setLocalStorageItem(LOCALSTORAGE_ITEMS.SNIPPETS_SAVED, snippets);
+  }, [snippets]);
 
   const onSetSettings = (settings) => {
     dispatch(setSettings(settings));

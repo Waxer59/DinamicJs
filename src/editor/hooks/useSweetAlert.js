@@ -37,7 +37,7 @@ export const useSweetAlert = () => {
   const { removeLocalStorageItem } = useLocalStorage();
   const { onSetSnippets, onSetSettings, onAddNewSnippet, onRemoveSnippet } =
     useSettingsStore();
-  const { encodeText } = useRouteUrl();
+  const { encodeBase64 } = useRouteUrl();
 
   const throwToast = (icon, title) => {
     Toast.fire({
@@ -474,7 +474,7 @@ export const useSweetAlert = () => {
             return;
           }
           if (saveName) {
-            onAddCodeSaved(saveName, encodeText(activeCode));
+            onAddCodeSaved(saveName, encodeBase64(activeCode));
             throwToast(SWAL2_ICONS.SUCCESS, 'Saved');
           }
         });
