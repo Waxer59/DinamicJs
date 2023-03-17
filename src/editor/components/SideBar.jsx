@@ -6,13 +6,55 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import confetti from 'canvas-confetti';
 import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
 import { SWAL2_ICONS } from '../../constants/sweetAlertIconsConstants';
+import { useEffect } from 'react';
+import { setEditorSnippets } from '../helpers/editorSnippets';
+import { useRouteUrl } from '../hooks/useRouteUrl';
 
 export const SideBar = () => {
+  const { onSetSnippets } = useSettingsStore();
+  const { settings, onSetSettings, snippets } = useSettingsStore();
+  const { setLocalStorageItem, getLocalStorageItem } = useLocalStorage();
+  const { getBase64Param, decodeBase64, saveBase64ToUrl } = useRouteUrl();
   const { throwTextAlert, throwConfig, throwLocalSaves, throwToast } =
     useSweetAlert();
-  const { settings, onSetSettings, snippets } = useSettingsStore();
-  const { setLocalStorageItem } = useLocalStorage();
-  const { activeCode, codeSaved } = useCodeStore();
+  const { activeCode, codeSaved, onSetActiveCode, onSetCodeSaved } =
+    useCodeStore();
+
+  useEffect(() => {
+    document.querySelector('html').className =
+      settings.theme === 'vs-dark' ? 'dark' : 'light';
+  }, [settings.theme]);
+
+  useEffect(() => {
+    const settings = getLocalStorageItem(LOCALSTORAGE_ITEMS.SETTINGS);
+    const codeSaved = getLocalStorageItem(LOCALSTORAGE_ITEMS.CODE_SAVED);
+    const snippetsSaved = getLocalStorageItem(
+      LOCALSTORAGE_ITEMS.SNIPPETS_SAVED
+    );
+    if (Array.isArray(codeSaved)) {
+      onSetCodeSaved(codeSaved);
+    }
+    if (Array.isArray(snippetsSaved)) {
+      onSetSnippets(snippetsSaved);
+    }
+    if (settings) {
+      onSetSettings(settings);
+    }
+    onSetActiveCode(decodeBase64(getBase64Param()));
+  }, []);
+
+  useEffect(() => {
+    setLocalStorageItem(LOCALSTORAGE_ITEMS.CODE_SAVED, codeSaved);
+  }, [codeSaved]);
+
+  useEffect(() => {
+    saveBase64ToUrl(activeCode);
+  }, [activeCode]);
+
+  useEffect(() => {
+    setEditorSnippets(snippets);
+    setLocalStorageItem(LOCALSTORAGE_ITEMS.SNIPPETS_SAVED, snippets);
+  }, [snippets]);
 
   const onSkypackClick = () => {
     window.open('https://www.skypack.dev/', '_blank', 'noopener,noreferrer');

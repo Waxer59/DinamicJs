@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
 import {
   addCodeSaved,
   removeCodeSaved,
@@ -10,14 +8,11 @@ import {
   setCodeSaved,
   setUploadedCode
 } from '../../store/slices/code/codeSlice';
-import { useLocalStorage } from './useLocalStorage';
 import { useRouteUrl } from './useRouteUrl';
 
 export const useCodeStore = () => {
   const dispatch = useDispatch();
-  const { encodeBase64, decodeBase64, getBase64Param } = useRouteUrl();
-  const { getLocalStorageItem, setLocalStorageItem } = useLocalStorage();
-  const { saveBase64ToUrl } = useRouteUrl();
+  const { encodeBase64, decodeBase64 } = useRouteUrl();
   const { codeSaved, activeCode, uploadedCode } = useSelector(
     (state) => state.code
   );
@@ -62,20 +57,6 @@ export const useCodeStore = () => {
     }
     return false;
   };
-
-  useEffect(() => {
-    const codeSaved = getLocalStorageItem(LOCALSTORAGE_ITEMS.CODE_SAVED);
-    onSetActiveCode(decodeBase64(getBase64Param()));
-    onSetCodeSaved(Array.isArray(codeSaved) ? codeSaved : []);
-  }, []);
-
-  useEffect(() => {
-    setLocalStorageItem(LOCALSTORAGE_ITEMS.CODE_SAVED, codeSaved);
-  }, [codeSaved]);
-
-  useEffect(() => {
-    saveBase64ToUrl(activeCode);
-  }, [activeCode]);
 
   return {
     onAddCodeSaved,
