@@ -12,11 +12,12 @@ import { useRouteUrl } from './useRouteUrl';
 
 export const useCodeStore = () => {
   const dispatch = useDispatch();
-  const { encodeText, decodeByCode } = useRouteUrl();
+  const { encodeBase64, decodeBase64 } = useRouteUrl();
   const { codeSaved, activeCode, uploadedCode } = useSelector(
     (state) => state.code
   );
-  const onAddCodeSaved = (name, code = encodeText(activeCode)) => {
+
+  const onAddCodeSaved = (name, code = encodeBase64(activeCode)) => {
     dispatch(addCodeSaved({ name, code }));
   };
 
@@ -40,7 +41,7 @@ export const useCodeStore = () => {
   const onGetCodeSavedByName = (name) => {
     const code = codeSaved.find((code) => code.name === name);
     if (code) {
-      return decodeByCode(code.code);
+      return decodeBase64(code.code);
     }
     return '';
   };

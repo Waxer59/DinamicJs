@@ -3,26 +3,13 @@ import Split from 'react-split';
 import { CodePreviewer } from './CodePreviewer';
 import { useEffect, useRef } from 'react';
 import { useCodeStore } from '../hooks/useCodeStore';
-import { useRouteUrl } from '../hooks/useRouteUrl';
 import { useSweetAlert } from '../hooks/useSweetAlert';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { SWAL2_ICONS } from '../../constants/sweetAlertIconsConstants';
 
 export const CodeEditor = () => {
   const dropArea = useRef(null);
   const { throwToast } = useSweetAlert();
-  const { onSetActiveCode, onSetUploadedCode, onSetCodeSaved, codeSaved } =
-    useCodeStore();
-  const { getLocalStorageItem, setLocalStorageItem } = useLocalStorage();
-  const { decodeText } = useRouteUrl();
-
-  useEffect(() => {
-    onSetActiveCode(decodeText());
-    onSetCodeSaved(getLocalStorageItem('codeSaved') ?? []);
-  }, []);
-
-  useEffect(() => {
-    setLocalStorageItem('codeSaved', codeSaved);
-  }, [codeSaved]);
+  const { onSetUploadedCode } = useCodeStore();
 
   useEffect(() => {
     const getTextFromFile = (file) => {
@@ -44,12 +31,12 @@ export const CodeEditor = () => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
         if (file.type !== 'text/javascript') {
-          throwToast('error', 'Invalid file type');
+          throwToast(SWAL2_ICONS.ERROR, 'Invalid file type');
           onSetUploadedCode('');
         } else {
           const text = await getTextFromFile(file);
           onSetUploadedCode(text);
-          throwToast('success', 'File uploaded successfully');
+          throwToast(SWAL2_ICONS.SUCCESS, 'File uploaded successfully');
         }
       },
       false

@@ -1,4 +1,4 @@
-# DinamicJs Version 2.7.6
+# DinamicJs Version 2.8.6
 
 It is an application that runs js in real time, its console is displayed on the right where you can see the logs,
 all the code is serialized in the url in base64 to be able to share or save it.
@@ -23,7 +23,7 @@ yarn dev
 - TEST = testing
 - PROD = production
 
-## Snippets
+## Default Snippets
 
 - **clg** : console.log
 - **imp** : import

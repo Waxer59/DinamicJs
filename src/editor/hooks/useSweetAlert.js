@@ -1,11 +1,20 @@
 import Swal from 'sweetalert2';
+import {
+  DEFAULT_SETTINGS,
+  DEFAULT_SNIPPETS
+} from '../../constants/editorSettingsConstants';
+import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
+import { SWAL2_ICONS } from '../../constants/sweetAlertIconsConstants';
 import { useCodeStore } from './useCodeStore';
+import { useLocalStorage } from './useLocalStorage';
 import { useRouteUrl } from './useRouteUrl';
+import { useSettingsStore } from './useSettingsStore';
 
 const customClass = {
   popup: 'alerts',
   validationMessage: 'alerts'
 };
+
 const Toast = Swal.mixin({
   toast: true,
   customClass,
@@ -25,7 +34,16 @@ export const useSweetAlert = () => {
     onGetCodeSavedByName,
     onSetUploadedCode
   } = useCodeStore();
-  const { encodeText } = useRouteUrl();
+  const { removeLocalStorageItem } = useLocalStorage();
+  const {
+    onSetSnippets,
+    onSetSettings,
+    onAddNewSnippet,
+    onRemoveSnippet,
+    onGetSnippetByLabel,
+    onEditSnippet
+  } = useSettingsStore();
+  const { encodeBase64 } = useRouteUrl();
 
   const throwToast = (icon, title) => {
     Toast.fire({
@@ -35,8 +53,11 @@ export const useSweetAlert = () => {
     });
   };
 
-  const throwAlert = async (title, inputLabel, icon) => {
-    const { value } = await Swal.fire({
+  const throwTextAlert = async (
+    { title, inputLabel, icon },
+    validInput = ''
+  ) => {
+    const { value } = await throwModal({
       title,
       customClass,
       icon,
@@ -44,10 +65,13 @@ export const useSweetAlert = () => {
       input: 'text',
       inputLabel,
       showCloseButton: true,
-      showLoaderOnConfirm: true,
+      showLoaderOnConfirm: false,
       showCancelButton: true,
       inputValidator: (value) => {
-        if (!value) {
+        if (validInput && validInput !== value) {
+          return 'Write the name correctly!';
+        }
+        if (value.trim().length <= 0) {
           return 'You need to write something!';
         }
       }
@@ -62,63 +86,15 @@ export const useSweetAlert = () => {
     fontSize,
     lineNumbers,
     theme,
-    mouseWheelZoom
+    mouseWheelZoom,
+    snippets = []
   }) => {
-    const { value } = await Swal.fire({
-      title: 'Configuration',
-      customClass,
-      heightAuto: false,
-      html: `
-      <style>
-        .config {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-        select{
-          border-radius: 5px;
-          padding: 2px;
-          border: 1px solid #ccc;
-          outline: none;
-          border: none;
-          background: rgba( 255, 255, 255, 0.5 );
-          backdrop-filter: blur( 20px );
-          -webkit-backdrop-filter: blur( 20px );
-          border-radius: 10px;
-        }
-        input[type="number"] {
-          padding: 2px;
-          border: 1px solid #ccc;
-          text-align: center;
-          outline: none;
-          border: none;
-          background: rgba( 255, 255, 255, 0.5 );
-          backdrop-filter: blur( 20px );
-          -webkit-backdrop-filter: blur( 20px );
-          border-radius: 10px;
-        }
-        input[type="checkbox"] {
-          margin: 0;
-          padding: 0;
-          width: 1rem;
-          height: 1rem;
-          outline: none;
-          border: none;
-          background: rgba( 255, 255, 255, 0.5 );
-          backdrop-filter: blur( 20px );
-          -webkit-backdrop-filter: blur( 20px );
-          border-radius: 10px;
-        }
-        .reset-btn{
-          background: #f44336;
-          color: #fff;
-          border: none;
-          padding: 0.5rem 1rem;
-          border-radius: 5px;
-          cursor: pointer;
-          margin-top: 30px;
-        }
-      </style>
+    const { value } = await throwModal(
+      {
+        title: 'Configuration',
+        customClass,
+        heightAuto: false,
+        html: `
         <div class="config">
           <div class="config__item">
             <label for="config__theme">Theme</label>
@@ -166,152 +142,307 @@ export const useSweetAlert = () => {
             <label for="config__fontSize">Font size</label>
             <input id="config__fontSize" type="number" min="1" max="100" value="${fontSize}">
           </div>
+          <div class="config__item">
+            <button class="config-btn" id="config__snippets">Config snippets</button>
+          </div>
         </div>
-        <button class="reset-btn" id="reset-btn">Reset</button>
           `,
-      showCloseButton: true,
-      showCancelButton: true,
-      confirmButtonText: 'Save',
-      didOpen: () => {
-        const resetBtn = document.getElementById('reset-btn');
-        resetBtn.addEventListener('click', () => {
-          Swal.fire({
-            title: 'Are you sure?',
-            customClass,
-            heightAuto: false,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, reset it!'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.close();
-              localStorage.removeItem('settings');
-              location.reload();
-            }
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+        denyButtonText: 'Reset',
+        showDenyButton: true,
+        didOpen: () => {
+          const snippetsBtn = document.querySelector('#config__snippets');
+          snippetsBtn.addEventListener('click', async () => {
+            throwSnippetsSettings(snippets);
           });
-        });
+        },
+        preConfirm: () => {
+          const theme =
+            document.getElementById('config__theme').value === 'dark'
+              ? 'vs-dark'
+              : 'vs';
+          const lineNumbers = document.getElementById(
+            'config__lineNumbers'
+          ).value;
+          const fontLigatures = document.getElementById(
+            'config__fontLigatures'
+          ).checked;
+
+          const minimap = document.getElementById('config__minimap').checked;
+          const fontSize = document.getElementById('config__fontSize').value;
+          const mouseWheelZoom = document.getElementById(
+            'config__mouseWheelZoom'
+          ).checked;
+          return {
+            theme,
+            lineNumbers,
+            fontLigatures,
+            minimap: {
+              enabled: minimap
+            },
+            fontSize,
+            mouseWheelZoom
+          };
+        }
       },
-      preConfirm: () => {
-        const theme =
-          document.getElementById('config__theme').value === 'dark'
-            ? 'vs-dark'
-            : 'vs';
-        const lineNumbers = document.getElementById(
-          'config__lineNumbers'
-        ).value;
-        const fontLigatures = document.getElementById(
-          'config__fontLigatures'
-        ).checked;
-
-        const minimap = document.getElementById('config__minimap').checked;
-        const fontSize = document.getElementById('config__fontSize').value;
-        const mouseWheelZoom = document.getElementById(
-          'config__mouseWheelZoom'
-        ).checked;
-
-        return {
-          theme,
-          lineNumbers,
-          fontLigatures,
-          minimap: {
-            enabled: minimap
-          },
-          fontSize,
-          mouseWheelZoom
-        };
+      async (result) => {
+        if (result.isDenied) {
+          await throwModal(
+            {
+              title: 'Are you sure?',
+              customClass,
+              heightAuto: false,
+              icon: SWAL2_ICONS.WARNING,
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, reset it!'
+            },
+            (result) => {
+              if (result.isConfirmed) {
+                Swal.close();
+                removeLocalStorageItem(LOCALSTORAGE_ITEMS.SETTINGS);
+                removeLocalStorageItem(LOCALSTORAGE_ITEMS.SNIPPETS_SAVED);
+                onSetSettings(DEFAULT_SETTINGS);
+                onSetSnippets(DEFAULT_SNIPPETS);
+                throwToast(SWAL2_ICONS.SUCCESS, 'Settings reseted');
+              }
+              return result;
+            }
+          );
+        }
+        return result;
       }
-    });
-    return { ...value };
+    );
+    return value;
   };
 
-  const throwLocalSave = async (saves = []) => {
+  const throwSnippetsSettings = async (snippets = []) => {
+    let htmlSavesList = '';
+    snippets.forEach((snippet, index) => {
+      htmlSavesList += `
+          <li>
+            <button class="save-item__name" title="${snippet.label}" id="code-btn" data-name="${snippet.label}">${snippet.label}</button>
+            <div class="save-item__actions">
+            <button class="save-item__btn edit-btn" id="snippet-item__btn-${index}" data-name="${snippet.label}" title="Edit snippet" ><i class="fa-solid fa-pen-to-square"></i></button>
+            <button class="save-item__btn delete-btn" id="snippet-item__btn-${index}" data-name="${snippet.label}" title="Delete snippet" ><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </li>`;
+    });
+
+    await throwModal(
+      {
+        title: 'Custom snippets',
+        customClass,
+        heightAuto: false,
+        showCloseButton: true,
+        showCancelButton: false,
+        showConfirmButton: false,
+        denyButtonText: 'Reset',
+        showDenyButton: true,
+        html: `
+            <div class="config">
+              <div class="config__item">
+              <button class="save-btn" id="newSnippet-btn">New snippet</button>
+              </div>
+              <div class="config__item">
+              <ul class="items-saved">
+                ${htmlSavesList}
+              </ul>
+              </div>
+            </div>`,
+        didOpen: async () => {
+          const newSnippetBtn = document.getElementById('newSnippet-btn');
+          const editBtns = document.querySelectorAll('.edit-btn');
+          const deleteBtns = document.querySelectorAll('.delete-btn');
+
+          editBtns.forEach((btn) => {
+            btn.addEventListener('click', async () => {
+              const snippetLabel = btn.getAttribute('data-name');
+
+              const { label, insertText, documentation } =
+                onGetSnippetByLabel(snippetLabel);
+
+              await throwModal(
+                {
+                  title: 'Edit Snippet',
+                  html: `<input id="snippet-label" type="text" class="swal2-input" value="${label}" placeholder="Label">
+                         <input id="snippet-documentation" class="swal2-input" value="${documentation}" type="text" placeholder="Documentation">
+                         <textarea id="snippet-insertText" class="swal2-textarea" placeholder="Insert text">${insertText}</textarea>`,
+                  customClass,
+                  heightAuto: false,
+                  showCloseButton: true,
+                  showLoaderOnConfirm: false,
+                  showCancelButton: true,
+                  confirmButtonText: 'Save',
+                  preConfirm: () => {
+                    const labelValue =
+                      document.querySelector('#snippet-label').value;
+                    const documentationValue = document.querySelector(
+                      '#snippet-documentation'
+                    ).value;
+                    const insertTextValue = document.querySelector(
+                      '#snippet-insertText'
+                    ).value;
+
+                    if (
+                      ![labelValue, documentationValue, insertTextValue].every(
+                        (el) => el.trim().length > 0
+                      )
+                    ) {
+                      Swal.showValidationMessage('Please fill in all fields');
+                    }
+                  }
+                },
+                (result) => {
+                  if (result.isConfirmed) {
+                    const label =
+                      document.querySelector('#snippet-label').value;
+                    const documentation = document.querySelector(
+                      '#snippet-documentation'
+                    ).value;
+                    const insertText = document.querySelector(
+                      '#snippet-insertText'
+                    ).value;
+                    onEditSnippet({
+                      snippetToChangeLabel: snippetLabel,
+                      label,
+                      documentation,
+                      insertText
+                    });
+                    throwToast(SWAL2_ICONS.SUCCESS, 'Snippet Edited!');
+                  }
+                }
+              );
+            });
+          });
+
+          deleteBtns.forEach((btn) => {
+            btn.addEventListener('click', async () => {
+              const snippetLabel = btn.getAttribute('data-name');
+              const confirmSnippetLabel = await throwTextAlert(
+                {
+                  title: 'Deleting',
+                  inputLabel: `You are deleting "${snippetLabel}" type the name to confirm`,
+                  icon: SWAL2_ICONS.WARNING
+                },
+                snippetLabel
+              );
+              if (confirmSnippetLabel) {
+                onRemoveSnippet(snippetLabel);
+                throwToast(SWAL2_ICONS.SUCCESS, 'Deleted');
+              }
+            });
+          });
+
+          newSnippetBtn.addEventListener('click', async () => {
+            await throwModal(
+              {
+                title: 'New Snippet',
+                html: `<input id="snippet-label" type="text" class="swal2-input" placeholder="Label">
+                       <input id="snippet-documentation" class="swal2-input" type="text" placeholder="Documentation">
+                       <textarea id="snippet-insertText" class="swal2-textarea" placeholder="Insert text"></textarea>`,
+                customClass,
+                heightAuto: false,
+                showCloseButton: true,
+                showLoaderOnConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                preConfirm: () => {
+                  const labelValue =
+                    document.querySelector('#snippet-label').value;
+                  const documentationValue = document.querySelector(
+                    '#snippet-documentation'
+                  ).value;
+                  const insertTextValue = document.querySelector(
+                    '#snippet-insertText'
+                  ).value;
+
+                  if (
+                    ![labelValue, documentationValue, insertTextValue].every(
+                      (el) => el.trim().length > 0
+                    )
+                  ) {
+                    Swal.showValidationMessage('Please fill in all fields');
+                  }
+                }
+              },
+              (result) => {
+                if (result.isConfirmed) {
+                  const labelValue =
+                    document.querySelector('#snippet-label').value;
+                  const documentationValue = document.querySelector(
+                    '#snippet-documentation'
+                  ).value;
+                  const insertTextValue = document.querySelector(
+                    '#snippet-insertText'
+                  ).value;
+                  onAddNewSnippet(
+                    labelValue,
+                    documentationValue,
+                    insertTextValue
+                  );
+                  throwToast(SWAL2_ICONS.SUCCESS, 'Snippet Saved!');
+                }
+              }
+            );
+          });
+        }
+      },
+      async (result) => {
+        if (result.isDenied) {
+          await throwModal(
+            {
+              title: 'Are you sure?',
+              customClass,
+              heightAuto: false,
+              icon: SWAL2_ICONS.WARNING,
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, reset it!'
+            },
+            (result) => {
+              if (result.isConfirmed) {
+                Swal.close();
+                removeLocalStorageItem(LOCALSTORAGE_ITEMS.SNIPPETS_SAVED);
+                onSetSnippets(DEFAULT_SNIPPETS);
+                throwToast(SWAL2_ICONS.SUCCESS, 'Snippets reseted');
+              }
+              return result;
+            }
+          );
+        }
+        return result;
+      }
+    );
+  };
+
+  const throwLocalSaves = async (saves = []) => {
     let htmlSavesList = '';
     saves.forEach((save, index) => {
       htmlSavesList += `
       <li>
-        <button class="save-item__name" title="save.name" id="code-btn" data-name="${save.name}">${save.name}</button>
+        <button class="save-item__name code-btn" title="${save.name}" data-name="${save.name}">${save.name}</button>
         <div class="save-item__actions">
         <button class="save-item__btn overwrite-btn" id="save-item__btn-${index}" data-name="${save.name}" title="Overwrite" ><i class="fa-solid fa-floppy-disk"></i></button>
-          <button class="save-item__btn edit-btn" id="save-item__btn-${index}" data-name="${save.name}" title="Edit name" ><i class="fa-solid fa-pen-to-square"></i></button>
-          <button class="save-item__btn delete-btn" id="save-item__btn-${index}" data-name="${save.name}" title="Delete code" ><i class="fa-solid fa-trash"></i></button>
+        <button class="save-item__btn edit-btn" id="save-item__btn-${index}" data-name="${save.name}" title="Edit name" ><i class="fa-solid fa-pen-to-square"></i></button>
+        <button class="save-item__btn delete-btn" id="save-item__btn-${index}" data-name="${save.name}" title="Delete code" ><i class="fa-solid fa-trash"></i></button>
         </div>
       </li>
       `;
     });
-    await Swal.fire({
+
+    await throwModal({
       title: 'Local saves',
       customClass,
       heightAuto: false,
+      showCloseButton: true,
+      showCancelButton: false,
+      showConfirmButton: false,
       html: `
-      <style>
-        .overwrite-btn{
-          background: #FFBC49 !important;
-          color: #fff;
-          border: none;
-          padding: 0.5rem 1rem;
-          border-radius: 5px;
-          cursor: pointer;
-        }
-        .save-item__actions{
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 5px;
-        }
-        .save-item__name{
-          width: 60%;
-          color: #fff;
-          background: #252627 !important;
-          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-          border: none;
-          padding: 0.5rem 1rem;
-          border-radius: 5px;
-          cursor: pointer;
-        }
-        .save-btn{
-          background: #4caf50;
-          color: #fff;
-          border: none;
-          padding: 0.5rem 1rem;
-          border-radius: 5px;
-          cursor: pointer;
-        }
-
-        .items-saved{
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          margin-top: 15px;
-        }
-
-        .items-saved li{
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .items-saved li button{
-          background: #4caf50;
-          color: #fff;
-          border: none;
-          padding: 0.5rem 1rem;
-          border-radius: 5px;
-          cursor: pointer;
-        }
-
-        .edit-btn{
-          background: #2196f3 !important;
-        }
-
-        .delete-btn{
-          background: #f44336 !important;
-        }
-      </style>
         <div class="config">
           <div class="config__item">
           <button class="save-btn" id="save-btn">Save this file</button>
@@ -323,74 +454,74 @@ export const useSweetAlert = () => {
           </div>
         </div>
           `,
-      showCloseButton: true,
-      showCancelButton: false,
-      showConfirmButton: false,
       didOpen: async () => {
         const saveBtn = document.getElementById('save-btn');
         const editBtns = document.querySelectorAll('.edit-btn');
         const deleteBtns = document.querySelectorAll('.delete-btn');
         const overwriteBtns = document.querySelectorAll('.overwrite-btn');
-        const codeBtns = document.querySelectorAll('#code-btn');
+        const codeBtns = document.querySelectorAll('.code-btn');
 
         overwriteBtns.forEach((btn) => {
           btn.addEventListener('click', async () => {
-            const name = await throwAlert(
-              'Overwriting',
-              `Your overwriting " ${btn.getAttribute('data-name')} "`
+            const saveName = btn.getAttribute('data-name');
+            const overwritedSaveName = await throwTextAlert(
+              {
+                title: 'Overwriting',
+                inputLabel: `You are overwriting "${saveName}"`,
+                icon: SWAL2_ICONS.WARNING
+              },
+              saveName
             );
-            if (name) {
-              onAddCodeSaved(name);
-              throwToast('success', 'Saved');
-              return;
+            if (overwritedSaveName) {
+              onAddCodeSaved(overwritedSaveName);
+              throwToast(SWAL2_ICONS.SUCCESS, 'Saved');
             }
-            throwToast('error', 'Canceled');
           });
         });
 
         editBtns.forEach((btn) => {
           btn.addEventListener('click', async () => {
-            const name = await throwAlert(
-              'Editing',
-              `Your editing "${btn.getAttribute('data-name')}"`
-            );
-            if (name) {
-              onRenameCodeSaved(btn.getAttribute('data-name'), name);
-              throwToast('success', 'Saved');
-              return;
+            const saveName = btn.getAttribute('data-name');
+            const SaveNewName = await throwTextAlert({
+              title: 'Editing',
+              inputLabel: `You are editing "${saveName}"`,
+              icon: SWAL2_ICONS.WARNING
+            });
+            if (SaveNewName) {
+              onRenameCodeSaved(btn.getAttribute('data-name'), SaveNewName);
+              throwToast(SWAL2_ICONS.SUCCESS, 'Saved');
             }
-            throwToast('error', 'Canceled');
           });
         });
 
         deleteBtns.forEach((btn) => {
           btn.addEventListener('click', async () => {
-            const name = await throwAlert(
-              'Deleting',
-              `Your deleting "${btn.getAttribute(
-                'data-name'
-              )}" type the name to confirm`
-            );
-            if (name === btn.getAttribute('data-name')) {
-              onRemoveCodeSaved(name);
-              throwToast('success', 'Deleted');
-              return;
+            const saveName = btn.getAttribute('data-name');
+            const confirmSaveName = await throwTextAlert({
+              title: 'Deleting',
+              inputLabel: `You are deleting "${saveName}" type the name to confirm`,
+              icon: SWAL2_ICONS.WARNING
+            });
+            if (confirmSaveName) {
+              onRemoveCodeSaved(confirmSaveName);
+              throwToast(SWAL2_ICONS.SUCCESS, 'Deleted');
             }
-            throwToast('error', 'Canceled');
           });
         });
+
         saveBtn.addEventListener('click', async () => {
-          const name = await throwAlert(
-            'Name the code',
-            'This code will be saved locally'
-          );
-          if (onCheckNameAndCode(name)) {
-            throwToast('error', 'This name already exists');
+          const saveName = await throwTextAlert({
+            title: 'Name the code',
+            inputLabel: 'This code will be saved locally',
+            icon: SWAL2_ICONS.INFO
+          });
+          if (onCheckNameAndCode(saveName)) {
+            throwToast(SWAL2_ICONS.ERROR, 'This name already exists');
             return;
           }
-          if (name && name.trim() !== '') {
-            onAddCodeSaved(name, encodeText(activeCode));
-            throwToast('success', 'Saved');
+          if (saveName) {
+            onAddCodeSaved(saveName, encodeBase64(activeCode));
+            throwToast(SWAL2_ICONS.SUCCESS, 'Saved');
           }
         });
 
@@ -399,24 +530,29 @@ export const useSweetAlert = () => {
             const code = onGetCodeSavedByName(btn.getAttribute('data-name'));
             if (code) {
               onSetUploadedCode(code);
-              throwToast('success', 'Loaded');
+              throwToast(SWAL2_ICONS.SUCCESS, 'Loaded');
               return;
             }
             if (code === '') {
-              throwToast('info', 'Empty code');
+              throwToast(SWAL2_ICONS.INFO, 'Empty code');
               return;
             }
-            throwToast('error', 'Canceled');
+            throwToast(SWAL2_ICONS.ERROR, 'Canceled');
           });
         });
       }
     });
   };
 
+  const throwModal = async (config = {}, thenFc = (result) => result) => {
+    const modal = await Swal.fire(config).then(thenFc);
+    return modal;
+  };
+
   return {
     throwToast,
-    throwAlert,
+    throwTextAlert,
     throwConfig,
-    throwLocalSave
+    throwLocalSaves
   };
 };

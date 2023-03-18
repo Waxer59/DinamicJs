@@ -4,27 +4,29 @@ import { useCodeStore } from '../hooks/useCodeStore';
 import { useSettingsStore } from '../hooks/useSettingsStore';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import confetti from 'canvas-confetti';
+import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
+import { SWAL2_ICONS } from '../../constants/sweetAlertIconsConstants';
 
 export const SideBar = () => {
-  const { throwAlert, throwConfig, throwLocalSave, throwToast } =
-    useSweetAlert();
-  const { settings, onSetSettings } = useSettingsStore();
-  const { setLocalStorageItem } = useLocalStorage();
+  const { settings, onSetSettings, snippets } = useSettingsStore();
   const { activeCode, codeSaved } = useCodeStore();
+  const { setLocalStorageItem } = useLocalStorage();
+  const { throwTextAlert, throwConfig, throwLocalSaves, throwToast } =
+    useSweetAlert();
 
   const onSkypackClick = () => {
     window.open('https://www.skypack.dev/', '_blank', 'noopener,noreferrer');
   };
 
   const onDownloadClick = async () => {
-    const fileName = await throwAlert(
-      'File name',
-      'Dont put any extension',
-      'info'
-    );
+    const fileName = await throwTextAlert({
+      title: 'File name',
+      inputLabel: 'Dont put any extension',
+      icon: SWAL2_ICONS.QUESTION
+    });
     if (fileName) {
       downloadjs(activeCode, `${fileName}.js`, 'text/javascript');
-      throwToast('success', 'Downloaded');
+      throwToast(SWAL2_ICONS.SUCCESS, 'Downloaded');
       confetti({
         particleCount: 100,
         spread: 70,
@@ -34,13 +36,15 @@ export const SideBar = () => {
   };
 
   const onConfigClick = async () => {
-    const configValue = await throwConfig(settings);
-    onSetSettings(configValue);
-    setLocalStorageItem('settings', configValue);
+    const configValue = await throwConfig({ ...settings, snippets });
+    if (configValue) {
+      onSetSettings(configValue);
+      setLocalStorageItem(LOCALSTORAGE_ITEMS.SETTINGS, configValue);
+    }
   };
 
   const onLocalSaveClick = () => {
-    throwLocalSave(codeSaved);
+    throwLocalSaves(codeSaved);
   };
 
   return (

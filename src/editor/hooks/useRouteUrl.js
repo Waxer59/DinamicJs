@@ -9,30 +9,24 @@ export const useRouteUrl = () => {
     return base64Param;
   };
 
-  const decodeText = () => {
-    const decodedText = isValid(base64Param) ? decode(base64Param) : '';
-    return decodedText;
-  };
-
-  const decodeByCode = (code) => {
+  const decodeBase64 = (code) => {
     const decodedText = isValid(code) ? decode(code) : '';
     return decodedText;
   };
 
-  const encodeText = (text) => {
+  const encodeBase64 = (text) => {
     const encodedText = encode(text);
     return encodedText;
   };
 
-  const saveCodeUrl = (text) => {
-    const encodedText = encodeText(text);
+  const saveBase64ToUrl = (text) => {
+    const encodedText = encodeBase64(text);
     navigate(`/${encodedText}`);
   };
   return {
-    decodeText,
-    saveCodeUrl,
-    decodeByCode,
-    encodeText,
+    saveBase64ToUrl,
+    decodeBase64,
+    encodeBase64,
     getBase64Param
   };
 };
