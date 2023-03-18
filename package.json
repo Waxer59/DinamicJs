@@ -9,7 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "prepare": "husky install",
-    "lint": "eslint \"{src,test}/**/*.{js,jsx}\" --fix"
+    "lint": "eslint \"{src,test}/**/*.{js,jsx}\" --fix",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@babel/standalone": "^7.20.6",

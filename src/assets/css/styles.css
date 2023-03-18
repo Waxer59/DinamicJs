@@ -98,46 +98,46 @@ html.light:root {
   gap: 1rem;
 }
 
-select{
+select {
   border-radius: 5px;
   padding: 2px;
   border: 1px solid #ccc;
   outline: none;
   border: none;
-  background: rgba( 255, 255, 255, 0.5 );
-  backdrop-filter: blur( 20px );
-  -webkit-backdrop-filter: blur( 20px );
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: 10px;
 }
-input[type="number"] {
+input[type='number'] {
   padding: 2px;
   border: 1px solid #ccc;
   text-align: center;
   outline: none;
   border: none;
-  background: rgba( 255, 255, 255, 0.5 );
-  backdrop-filter: blur( 20px );
-  -webkit-backdrop-filter: blur( 20px );
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: 10px;
 }
-input[type="checkbox"] {
+input[type='checkbox'] {
   margin: 0;
   padding: 0;
   width: 1rem;
   height: 1rem;
   outline: none;
   border: none;
-  background: rgba( 255, 255, 255, 0.5 );
-  backdrop-filter: blur( 20px );
-  -webkit-backdrop-filter: blur( 20px );
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: 10px;
 }
-.config-btn{
-  background: #007FFF;
+.config-btn {
+  background: #007fff;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 5px;
-  color: #FFF;
+  color: #fff;
   cursor: pointer;
 }
 
