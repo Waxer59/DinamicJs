@@ -56,3 +56,4 @@ yarn dev
 - [Redux](https://es.redux.js.org/)
 - [SweetAlert2](https://sweetalert2.github.io/)
 - [Stylized json](https://www.npmjs.com/package/stylized-json)
+- [Auto console log](https://www.npmjs.com/package/babel-plugin-auto-console-log)
