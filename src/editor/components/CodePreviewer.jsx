@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { useCodePreviewer } from '../hooks/useCodePreviewer';
 import { useCodeStore } from '../hooks/useCodeStore';
@@ -9,10 +9,6 @@ export const CodePreviewer = () => {
   const [code, setCode] = useState(activeCode);
 
   const { update } = useCodePreviewer();
-
-  useEffect(() => {
-    update(preview.current, code);
-  }, []);
 
   useEffect(() => {
     setCode(activeCode);

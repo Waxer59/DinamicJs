@@ -24,7 +24,7 @@ Array.from(arguments).forEach((log)=>{
 })
 // console.stdlog.apply(console, arguments);`;
 
-export const useCodePreviewer = () => {
+export const useCodePreviewer = (errorMsg = '') => {
   const { protectCode } = useTransformCode();
 
   const update = (output, code) => {
@@ -128,6 +128,7 @@ export const useCodePreviewer = () => {
                 ''
               )}
             }catch(e){
+              window.consoleError = e
               document.querySelector('#logger').innerHTML += '<div class="log-el"><p class="error">'+e+'</p></div>'
             }
           </script>
