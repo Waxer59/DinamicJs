@@ -6,7 +6,7 @@ const TIMEOUT = 100;
 
 Babel.registerPlugin('loopProtection', protect(TIMEOUT));
 Babel.registerPlugin('autoConsoleLog', autoConsoleLog());
-export const useProtectCode = () => {
+export const useTransformCode = () => {
   const transform = (source) =>
     Babel.transform(source, {
       plugins: ['autoConsoleLog', 'loopProtection']
