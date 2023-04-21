@@ -55,6 +55,5 @@ export const {
   resetUploadedCode,
   removeCodeSaved,
   renameCodeSaved,
-  setCodeSaved,
-  setIsOutputSplited
+  setCodeSaved
 } = codeSlice.actions;
