@@ -43,5 +43,5 @@ export const Editor = () => {
     editor?.updateOptions(settings);
   }, [settings]);
 
-  return <div className="code" ref={monacoEl}></div>;
+  return <div className="code view-lines monaco-mouse-cursor-text" contentEditable="true" ref={monacoEl}></div>;
 };
