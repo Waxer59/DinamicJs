@@ -24,7 +24,8 @@ Array.from(arguments).forEach((log)=>{
     '</code></pre>';
   }
   document.querySelector('#logger').innerHTML += '<div class="log-el">'+log.replace(/[,]/g,",&nbsp&nbsp")+'</div>'
-})`;
+})
+`;
 
 const STYLES = `
   ::-webkit-scrollbar {
@@ -112,29 +113,12 @@ export const useCodePreviewer = () => {
             console.stdlog = console.log.bind(console);
             
             // Overriding console.* functions
-            console.log = function(){
-              ${OVERRIDE_CONSOLE}
-            }
+            ["log", "error", "warn", "info", "table", "debug"].forEach((fn)=>{
+              console[fn] = function(msg){
+                ${OVERRIDE_CONSOLE}
+              }
+            })
 
-            console.error = function(){
-              ${OVERRIDE_CONSOLE}
-            }
-
-            console.warn = function(){
-              ${OVERRIDE_CONSOLE}
-            }
-
-            console.info = function(){
-              ${OVERRIDE_CONSOLE}
-            }
-
-            console.table = function(){
-              ${OVERRIDE_CONSOLE}
-            }
-
-            console.debug = function(){
-              ${OVERRIDE_CONSOLE}
-            }
             ${code.replace(/^(?!.*import).*$/gm, '')}
             try{
               ${code.replace(

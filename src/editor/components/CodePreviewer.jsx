@@ -6,5 +6,6 @@ export const CodePreviewer = forwardRef((props, ref) => {
       ref.current = null;
     };
   }, []);
-  return <iframe className="output" ref={ref}></iframe>;
+
+  return <iframe id="output" className="output" ref={ref}></iframe>;
 });
