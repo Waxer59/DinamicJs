@@ -1,7 +1,7 @@
 {
   "name": "dinamicjs",
   "private": true,
-  "version": "2.7.6",
+  "version": "3.1.0",
   "type": "module",
   "license": "MIT",
   "scripts": {
@@ -20,15 +20,19 @@
     "canvas-confetti": "^1.6.0",
     "downloadjs": "^1.4.7",
     "eslint": "^8.0.1",
+    "highlight.js": "^11.8.0",
     "js-base64": "^3.7.3",
     "loop-protect": "^2.1.6",
     "monaco-editor": "^0.34.1",
+    "openai": "^3.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.4",
+    "react-spinners": "^0.13.8",
     "react-split": "^2.0.14",
+    "snarkdown": "^2.0.0",
     "sweetalert2": "^11.6.15"
   },
   "devDependencies": {

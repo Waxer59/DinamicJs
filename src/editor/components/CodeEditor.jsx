@@ -1,11 +1,14 @@
-import { Editor } from './Editor';
-import Split from 'react-split';
-import { CodePreviewer } from './CodePreviewer';
 import { useEffect, useRef, useState } from 'react';
-import { useCodeStore } from '../hooks/useCodeStore';
-import { useSweetAlert } from '../hooks/useSweetAlert';
+import Split from 'react-split';
+import { Editor } from './Editor';
+import { CodePreviewer } from './CodePreviewer';
+import {
+  useCodeStore,
+  useSweetAlert,
+  useSettingsStore,
+  useCodePreviewer
+} from '../hooks/';
 import { SWAL2_ICONS } from '../../constants/sweetAlertIconsConstants';
-import { useCodePreviewer } from '../hooks/useCodePreviewer';
 
 export const CodeEditor = () => {
   const dropArea = useRef(null);
@@ -15,6 +18,7 @@ export const CodeEditor = () => {
   const { throwToast } = useSweetAlert();
   const { onSetUploadedCode, activeCode } = useCodeStore();
   const { update } = useCodePreviewer();
+  const { settings } = useSettingsStore();
 
   useEffect(() => {
     const getTextFromFile = (file) => {
@@ -74,6 +78,7 @@ export const CodeEditor = () => {
       width: 100%;
       border: none;
       background-color: #2C2C2C;
+      background-color: ${settings.theme === 'vs-dark' ? '#2C2C2C' : '#E4E4E4'};
       color: #9F9F9F;
     }
     </style>`;

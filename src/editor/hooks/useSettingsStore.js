@@ -4,15 +4,23 @@ import {
   setSnippets,
   addNewSnippet,
   removeSnippet,
-  editSnippet
+  editSnippet,
+  setChatGPTOpen,
+  setChatGPTQuestion
 } from '../../store/slices/settings/settingsSlice';
 
 export const useSettingsStore = () => {
   const dispatch = useDispatch();
-  const { settings, snippets } = useSelector((state) => state.settings);
+  const { settings, snippets, isChatGPTOpen, chatGPTQuestion } = useSelector(
+    (state) => state.settings
+  );
 
   const onSetSettings = (settings) => {
     dispatch(setSettings(settings));
+  };
+
+  const onSetChatGPTQuestion = (question) => {
+    dispatch(setChatGPTQuestion(question));
   };
 
   const onSetSnippets = (snippets) => {
@@ -21,6 +29,10 @@ export const useSettingsStore = () => {
 
   const onAddNewSnippet = (label, documentation, insertText) => {
     dispatch(addNewSnippet({ label, documentation, insertText }));
+  };
+
+  const onSetIsChatGPTOpen = (isOpen) => {
+    dispatch(setChatGPTOpen(isOpen));
   };
 
   const onRemoveSnippet = (label) => {
@@ -50,6 +62,10 @@ export const useSettingsStore = () => {
     onAddNewSnippet,
     onRemoveSnippet,
     onEditSnippet,
-    onGetSnippetByLabel
+    onGetSnippetByLabel,
+    isChatGPTOpen,
+    onSetIsChatGPTOpen,
+    chatGPTQuestion,
+    onSetChatGPTQuestion
   };
 };
