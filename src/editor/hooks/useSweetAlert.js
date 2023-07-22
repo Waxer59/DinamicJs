@@ -1,10 +1,10 @@
 import Swal from 'sweetalert2';
 import {
+  LOCALSTORAGE_ITEMS,
+  SWAL2_ICONS,
   DEFAULT_SETTINGS,
   DEFAULT_SNIPPETS
-} from '../../constants/editorSettingsConstants';
-import { LOCALSTORAGE_ITEMS } from '../../constants/localStorageItemsConstants';
-import { SWAL2_ICONS } from '../../constants/sweetAlertIconsConstants';
+} from '../../constants';
 import { useCodeStore } from './useCodeStore';
 import { useLocalStorage } from './useLocalStorage';
 import { useRouteUrl } from './useRouteUrl';
@@ -18,7 +18,7 @@ const customClass = {
 const Toast = Swal.mixin({
   toast: true,
   customClass,
-  position: 'top-end',
+  position: 'bottom-end',
   showConfirmButton: false,
   timer: 3000,
   timerProgressBar: false
@@ -87,6 +87,7 @@ export const useSweetAlert = () => {
     lineNumbers,
     theme,
     mouseWheelZoom,
+    chatGPTApiKey,
     snippets = []
   }) => {
     const { value } = await throwModal(
@@ -143,6 +144,11 @@ export const useSweetAlert = () => {
             <input id="config__fontSize" type="number" min="1" max="100" value="${fontSize}">
           </div>
           <div class="config__item">
+            <input id="config__chatGPTApiKey" type="text" spellcheck="false" ${
+              chatGPTApiKey ? `value="${chatGPTApiKey}"` : ''
+            }placeholder="ChatGPT Api Key">
+          </div>
+          <div class="config__item">
             <button class="config-btn" id="config__snippets">Config snippets</button>
           </div>
         </div>
@@ -159,6 +165,9 @@ export const useSweetAlert = () => {
           });
         },
         preConfirm: () => {
+          const chatGPTApiKey = document.getElementById(
+            'config__chatGPTApiKey'
+          ).value;
           const theme =
             document.getElementById('config__theme').value === 'dark'
               ? 'vs-dark'
@@ -183,7 +192,8 @@ export const useSweetAlert = () => {
               enabled: minimap
             },
             fontSize,
-            mouseWheelZoom
+            mouseWheelZoom,
+            chatGPTApiKey
           };
         }
       },
