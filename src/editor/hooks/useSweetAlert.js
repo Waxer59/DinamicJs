@@ -47,7 +47,6 @@ export const useSweetAlert = () => {
 
   const throwToast = (icon, title) => {
     Toast.fire({
-      heightAuto: false,
       icon,
       title
     });
@@ -61,7 +60,6 @@ export const useSweetAlert = () => {
       title,
       customClass,
       icon,
-      heightAuto: false,
       input: 'text',
       inputLabel,
       showCloseButton: true,
@@ -94,7 +92,6 @@ export const useSweetAlert = () => {
       {
         title: 'Configuration',
         customClass,
-        heightAuto: false,
         html: `
         <div class="config">
           <div class="config__item">
@@ -203,7 +200,6 @@ export const useSweetAlert = () => {
             {
               title: 'Are you sure?',
               customClass,
-              heightAuto: false,
               icon: SWAL2_ICONS.WARNING,
               showCancelButton: true,
               confirmButtonColor: '#3085d6',
@@ -246,7 +242,6 @@ export const useSweetAlert = () => {
       {
         title: 'Custom snippets',
         customClass,
-        heightAuto: false,
         showCloseButton: true,
         showCancelButton: false,
         showConfirmButton: false,
@@ -282,7 +277,6 @@ export const useSweetAlert = () => {
                          <input id="snippet-documentation" class="swal2-input" value="${documentation}" type="text" placeholder="Documentation">
                          <textarea id="snippet-insertText" class="swal2-textarea" placeholder="Insert text">${insertText}</textarea>`,
                   customClass,
-                  heightAuto: false,
                   showCloseButton: true,
                   showLoaderOnConfirm: false,
                   showCancelButton: true,
@@ -355,7 +349,6 @@ export const useSweetAlert = () => {
                        <input id="snippet-documentation" class="swal2-input" type="text" placeholder="Documentation">
                        <textarea id="snippet-insertText" class="swal2-textarea" placeholder="Insert text"></textarea>`,
                 customClass,
-                heightAuto: false,
                 showCloseButton: true,
                 showLoaderOnConfirm: false,
                 showCancelButton: true,
@@ -407,7 +400,6 @@ export const useSweetAlert = () => {
             {
               title: 'Are you sure?',
               customClass,
-              heightAuto: false,
               icon: SWAL2_ICONS.WARNING,
               showCancelButton: true,
               confirmButtonColor: '#3085d6',
@@ -448,7 +440,6 @@ export const useSweetAlert = () => {
     await throwModal({
       title: 'Local saves',
       customClass,
-      heightAuto: false,
       showCloseButton: true,
       showCancelButton: false,
       showConfirmButton: false,
