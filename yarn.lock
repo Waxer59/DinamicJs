@@ -598,10 +598,10 @@ axobject-query@^2.2.0:
   resolved "https://registry.yarnpkg.com/axobject-query/-/axobject-query-2.2.0.tgz#943d47e10c0b704aa42275e20edf3722648989be"
   integrity sha512-Td525n+iPOOyUQIeBfcASuG6uJsDOITl7Mds5gFyerkWiX7qhUTdYUBlSgNMyVqtSJqwpt1kXGLdUt6SykLMRA==
 
-babel-plugin-auto-console-log@^1.1.11:
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/babel-plugin-auto-console-log/-/babel-plugin-auto-console-log-1.1.13.tgz#84e0968e55ed244cf2d713de308dbea7b5b43fc3"
-  integrity sha512-UWhwhPuZpGLi7ndbVpNMd6bHj6RK7hh1DZNKGVN3wMsugaLyCWPbtF+2N3+Ky1yv7H2zq0NWJVuZ98+j/w7Wmg==
+babel-plugin-auto-console-log@^1.1.15:
+  version "1.1.15"
+  resolved "https://registry.yarnpkg.com/babel-plugin-auto-console-log/-/babel-plugin-auto-console-log-1.1.15.tgz#e0577fb567a3a369d9f3da9ceaa66fcc147e3731"
+  integrity sha512-oTJSpmjdzxQhuEax1ZHlbmLlGUmKj1pxhKAGYZrRDG7EctO6xY6YFIMHAWtBKAa4+4axDPPw+5HgvFLbejn3BQ==
 
 balanced-match@^1.0.0:
   version "1.0.2"
